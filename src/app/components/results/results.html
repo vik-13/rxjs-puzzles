@@ -1,0 +1,18 @@
+<div class="stream-wrapper current">
+  <div class="stream">
+    <ng-container *ngIf="outputSource$ | async as outputSource">
+      <rxp-bead
+        [element]="bead"
+        *ngFor="let bead of outputSource">{{bead.value}}</rxp-bead>
+    </ng-container>
+  </div>
+</div>
+<div class="stream-wrapper original">
+  <div class="stream">
+    <ng-container *ngIf="outputDestination$ | async as outputDestination">
+      <rxp-bead
+        [element]="bead"
+        *ngFor="let bead of outputDestination">{{bead.value}}</rxp-bead>
+    </ng-container>
+  </div>
+</div>

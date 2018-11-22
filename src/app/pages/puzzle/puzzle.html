@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="controls-container">
+    <mat-card class="controls">
+      <mat-card-title>Observables</mat-card-title>
+      <mat-card-content>
+        <div class="list"
+             cdkDropList
+             #sourceList="cdkDropList"
+             [cdkDropListData]="sources"
+             [cdkDropListConnectedTo]="streams"
+             (cdkDropListDropped)="drop($event)">
+          <mat-card class="source" cdkDrag *ngFor="let source of sources">{{source.title}}</mat-card>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="controls">
+      <mat-card-title>Operators</mat-card-title>
+      <div class="list"
+           cdkDropList
+           #operatorsList="cdkDropList"
+           [cdkDropListData]="operators"
+           [cdkDropListConnectedTo]="'operatorsList'"
+           (cdkDropListDropped)="drop($event)">
+        <mat-card class="operator" cdkDrag *ngFor="let operator of operators">{{operator.title}}</mat-card>
+      </div>
+    </mat-card>
+  </div>
+  <div class="main-container">
+    <div class="main-stream-container">
+      <rxp-stream [observableSource]="sourceList" [operatorsSource]="operatorsList"></rxp-stream>
+    </div>
+
+    <!--<div class="solution"-->
+         <!--cdkDropList-->
+         <!--#solutionList="cdkDropList"-->
+         <!--[cdkDropListData]="solution"-->
+         <!--(cdkDropListDropped)="dropSource($event)">-->
+      <!--<mat-card class="source" *ngFor="let source of solution">-->
+        <!--<mat-card-title>{{source.title}}</mat-card-title>-->
+        <!--<mat-card-content>-->
+          <!--<div class="start-decoration">.pipe(</div>-->
+          <!--<div class="pipes-container" id="operatorsList"-->
+               <!--cdkDropList-->
+               <!--#solutionOperatorsList="cdkDropList"-->
+               <!--[cdkDropListData]="source.operators"-->
+               <!--(cdkDropListDropped)="drop($event)">-->
+            <!--<mat-card class="operator" *ngFor="let operator of source.operators">{{operator.title}}</mat-card>-->
+          <!--</div>-->
+          <!--<div class="end-decoration">);</div>-->
+        <!--</mat-card-content>-->
+      <!--</mat-card>-->
+    <!--</div>-->
+    <rxp-results [source]="source$" [destination]="destination"></rxp-results>
+  </div>
+</div>

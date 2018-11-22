@@ -1,0 +1,19 @@
+<div class="stream-container">
+  <div class="observable-container"
+       [id]="dropListId"
+       cdkDropList
+       #observableDropList="cdkDropList"
+       [cdkDropListData]="observable"
+       [cdkDropListConnectedTo]="observableSource"
+       (cdkDropListDropped)="drop($event)">
+    <mat-card class="source" cdkDrag *ngFor="let source of observable">{{source.title}}</mat-card>
+  </div>
+  <div class="operators-container"
+       [id]="operatorsDropListId"
+       cdkDropList
+       #operatorsDropList="cdkDropList"
+       [cdkDropListConnectedTo]="operatorsSource"
+       [cdkDropListData]="operators">
+    Place <strong>Operators</strong> here.
+  </div>
+</div>
