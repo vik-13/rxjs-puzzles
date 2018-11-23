@@ -1,9 +1,12 @@
+@import "~src/assets/scss/variables";
+
 .container {
   display: flex;
   height: calc(100vh - 64px);
 
   .controls-container {
-    flex: 0 0 300px;
+    flex: 0 0 25%;
+    min-width: 300px;
     height: 100%;
     overflow: auto;
     padding: 8px 16px;
@@ -11,14 +14,24 @@
     .controls {
       margin: 8px 0;
 
-      .source {
-        display: table;
-        margin: 8px 0;
-      }
+      .list {
+        .source {
+          display: table;
+          margin: 8px 8px;
+          background-color: $color1;
+        }
 
-      .operator {
-        display: table;
-        margin: 8px 0;
+        .operator {
+          display: table;
+          margin: 8px 8px;
+          background-color: $color4;
+        }
+
+        .value {
+          display: table;
+          margin: 8px 8px;
+          background-color: $color3;
+        }
       }
     }
   }
@@ -37,12 +50,15 @@
       .source {
         display: table;
         margin: 8px 0;
+        background-color: $color1;
       }
 
       .operator {
         display: table;
         margin: 8px 0;
+        background-color: $color4;
       }
+
     }
   }
 }
@@ -54,5 +70,64 @@
 
 
 .main-stream-container {
-  padding: 32px 128px 232px;
+  padding: 32px 64px 132px;
+}
+
+.main-stream-container {
+  height: 100%;
+  overflow: auto;
+
+  .stream {
+    display: inline-block;
+
+    .observable-container {
+      position: relative;
+      min-height: 40px;
+      min-width: 100px;
+
+      &:before {
+        content: "Place observable here";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        white-space: nowrap;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .operators-container {
+      position: relative;
+      min-height: 40px;
+      min-width: 100px;
+    }
+
+    .value-container {
+      display: inline-block;
+      min-width: 32px;
+      min-height: 27px;
+      margin: -8px 0;
+    }
+
+    mat-card {
+      display: table;
+      margin: 8px 0;
+
+      &.observable {
+        display: inline-block;
+        background-color: $color1;
+      }
+
+      &.operator {
+        margin-left: 32px;
+        background-color: $color4;
+      }
+
+      &.value {
+        display: inline-block;
+        padding: 10px;
+        margin: -10px 8px;
+        background-color: $color3;
+      }
+    }
+  }
 }

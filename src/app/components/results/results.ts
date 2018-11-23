@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { of, OperatorFunction, ReplaySubject, Subject, timer, Timestamp, VirtualTimeScheduler } from 'rxjs';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { of, ReplaySubject, Subject, Timestamp, VirtualTimeScheduler } from 'rxjs';
 import { map, observeOn, reduce, takeUntil, timestamp } from 'rxjs/operators';
 
 @Component({
@@ -36,35 +36,34 @@ export class ResultsComponent {
   outputSource$ = new ReplaySubject(1);
   outputDestination$ = new ReplaySubject(1);
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-
-  }
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
   prepareOutputSource() {
     const stop$ = new Subject();
     const scheduler = new VirtualTimeScheduler(undefined, 100);
 
-    // let source = this.source.stream(scheduler);
-    // this.source.operators.forEach((item) => {
-    //   source = source.pipe(item.operator(scheduler));
-    // });
+    if (this.validate(this.source)) {
+      console.log('isValid');
+      this.source.root[0].stream(scheduler)
+        .pipe(...this.source.operators.map((item) => item.operator.operator(item.value[0].value, scheduler)))
+        .pipe(observeOn(scheduler))
+        .pipe(timestamp(scheduler))
+        .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
+        .pipe(takeUntil(stop$))
+        .pipe(reduce((a: any, b: any) => {
+          return a.concat(b);
+        }, []))
+        .subscribe((list) => {
+          console.log(list);
+          this.outputSource$.next(list);
+        });
 
-    this.source.stream(scheduler)
-      .pipe(...this.source.operators.map((item) => item.operator(scheduler)))
-      .pipe(observeOn(scheduler))
-      .pipe(timestamp(scheduler))
-      .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
-      .pipe(takeUntil(stop$))
-      .pipe(reduce((a: any, b: any) => {
-        return a.concat(b);
-      }, []))
-      .subscribe((list) => {
-        console.log(list);
-        this.outputSource$.next(list);
-      });
-
-    scheduler.flush();
-    stop$.next();
+      scheduler.flush();
+      stop$.next();
+    } else {
+      console.log('isNotValid');
+      this.outputSource$.next([]);
+    }
   }
 
   prepareOutputDestination() {
@@ -85,5 +84,20 @@ export class ResultsComponent {
 
     scheduler.flush();
     stop$.next();
+  }
+
+  validate(tree) {
+    if (!this.source.root.length) {
+      return false;
+    }
+
+    let isValid = true;
+    this.source.operators.forEach((operator) => {
+      if (operator.operator.required && !operator.value.length) {
+        isValid = false;
+      }
+    });
+
+    return isValid;
   }
 }

@@ -5,9 +5,8 @@
       <mat-card-content>
         <div class="list"
              cdkDropList
-             #sourceList="cdkDropList"
              [cdkDropListData]="sources"
-             [cdkDropListConnectedTo]="streams"
+             [cdkDropListConnectedTo]="'main'"
              (cdkDropListDropped)="drop($event)">
           <mat-card class="source" cdkDrag *ngFor="let source of sources">{{source.title}}</mat-card>
         </div>
@@ -16,40 +15,58 @@
     <mat-card class="controls">
       <mat-card-title>Operators</mat-card-title>
       <div class="list"
+           id="operatorsList"
            cdkDropList
            #operatorsList="cdkDropList"
            [cdkDropListData]="operators"
-           [cdkDropListConnectedTo]="'operatorsList'"
+           [cdkDropListConnectedTo]="'destinationOperators'"
            (cdkDropListDropped)="drop($event)">
-        <mat-card class="operator" cdkDrag *ngFor="let operator of operators">{{operator.title}}</mat-card>
+        <mat-card class="operator" cdkDrag *ngFor="let operator of operators">{{operator.operator.title}}</mat-card>
+      </div>
+    </mat-card>
+    <mat-card class="controls">
+      <mat-card-title>Operators</mat-card-title>
+      <div class="list"
+           id="src-values"
+           cdkDropList
+           [cdkDropListData]="values"
+           [cdkDropListConnectedTo]="getIds()"
+           (cdkDropListDropped)="drop($event)">
+        <mat-card class="value" cdkDrag *ngFor="let value of values">{{value.title}}</mat-card>
       </div>
     </mat-card>
   </div>
   <div class="main-container">
     <div class="main-stream-container">
-      <rxp-stream [observableSource]="sourceList" [operatorsSource]="operatorsList"></rxp-stream>
+      <div class="stream">
+        <div class="observable-container" id="main"
+             cdkDropList
+             [cdkDropListData]="tree.root"
+             (cdkDropListDropped)="dropObservable($event)">
+          <mat-card class="observable" (dblclick)="dblClickObservable($event)" cdkDrag *ngFor="let value of tree.root">{{value.title}}</mat-card>
+        </div>
+        <div class="operators-container"
+             id="destinationOperators"
+             cdkDropList
+             [cdkDropListConnectedTo]="operatorsList"
+             [cdkDropListData]="tree.operators"
+             (cdkDropListDropped)="dropOperator($event)">
+          <mat-card class="operator" cdkDrag (dblclick)="dblClickOperator($event, tree.operators, index)" *ngFor="let operator of tree.operators; let index = index">
+            <span>{{operator.operator.firstPart}}</span>
+            <span [id]="'dest-value-' + operator.id" class="value-container"
+                  cdkDropList
+                  [cdkDropListData]="operator.value"
+                  [cdkDropListOrientation]="'horizontal'"
+                  [cdkDropListConnectedTo]="getIds(operator.id)"
+                  (cdkDropListDropped)="dropValue($event)">
+              <mat-card class="value" cdkDrag (dblclick)="dblClickValue($event, operator.value, index)" *ngFor="let value of operator.value; let index = index;">{{value.title}}</mat-card>
+            </span>
+            <span>{{operator.operator.secondPart}}</span>
+          </mat-card>
+        </div>
+      </div>
     </div>
 
-    <!--<div class="solution"-->
-         <!--cdkDropList-->
-         <!--#solutionList="cdkDropList"-->
-         <!--[cdkDropListData]="solution"-->
-         <!--(cdkDropListDropped)="dropSource($event)">-->
-      <!--<mat-card class="source" *ngFor="let source of solution">-->
-        <!--<mat-card-title>{{source.title}}</mat-card-title>-->
-        <!--<mat-card-content>-->
-          <!--<div class="start-decoration">.pipe(</div>-->
-          <!--<div class="pipes-container" id="operatorsList"-->
-               <!--cdkDropList-->
-               <!--#solutionOperatorsList="cdkDropList"-->
-               <!--[cdkDropListData]="source.operators"-->
-               <!--(cdkDropListDropped)="drop($event)">-->
-            <!--<mat-card class="operator" *ngFor="let operator of source.operators">{{operator.title}}</mat-card>-->
-          <!--</div>-->
-          <!--<div class="end-decoration">);</div>-->
-        <!--</mat-card-content>-->
-      <!--</mat-card>-->
-    <!--</div>-->
     <rxp-results [source]="source$" [destination]="destination"></rxp-results>
   </div>
 </div>

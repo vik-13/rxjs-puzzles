@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { interval, of, Subject, timer } from 'rxjs';
-import { debounce, debounceTime, filter, map } from 'rxjs/operators';
-import { StreamComponent } from '../../components/stream/stream';
+import { interval, Subject } from 'rxjs';
+import { debounceTime, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'rxp-puzzle',
@@ -11,14 +10,10 @@ import { StreamComponent } from '../../components/stream/stream';
 })
 export class PuzzleComponent {
 
-  @ViewChildren(StreamComponent)
-  set streamComponent(value: QueryList<StreamComponent>) {
-    this.streams = value.toArray().map((item) => item.observableDropList);
-  }
-
-  streams;
-  solution: any[] = [];
-  solutionOperators: any[] = [];
+  tree = {
+    root: [],
+    operators: [],
+  };
 
   sources: any[] = [
     {
@@ -26,39 +21,75 @@ export class PuzzleComponent {
       stream: (scheduler) => {
         return interval(10, scheduler);
       }
-    },
+    }
   ];
 
   operators: any[] = [
     {
-      title: 'debounceTime(...)',
-      operator: (scheduler) => debounceTime(5, scheduler),
-      argumentsType: 'number'
+      id: 0,
+      operator: {
+        title: 'debounceTime(...)',
+        firstPart: 'debounceTime(',
+        secondPart: ')',
+        operator: (arg, scheduler) => debounceTime(arg, scheduler),
+        argumentsType: 'number',
+        required: true,
+      },
+      value: []
     },
     {
-      title: 'debounceTime(...)',
-      operator: (scheduler) => debounceTime(10, scheduler),
-      argumentsType: 'number'
-    },
-    {
-      title: 'filter(...)',
-      operator: (scheduler) => filter((x) => x > 3),
-      argumentsType: 'function'
-    },
-    {
-      title: 'map(...)',
-      operator: (scheduler) => map((x: any) => (x + 10)),
-      argumentsType: 'function'
-    },
-    {
-      title: 'switchMap(...)',
-      operator: (scheduler) => map((x: any) => (x + 10)),
-      argumentsType: 'observable'
+      id: 1,
+      operator: {
+        title: 'filter(...)',
+        firstPart: 'filter(',
+        secondPart: ')',
+        operator: (arg, scheduler) => filter(arg),
+        argumentsType: 'function',
+        required: true,
+      },
+      value: []
+    }, {
+      id: 2,
+      operator: {
+        title: 'map(...)',
+        firstPart: 'map(',
+        secondPart: ')',
+        operator: (arg, scheduler) => map(arg),
+        argumentsType: 'function',
+        required: true,
+      },
+      value: []
+    }, {
+      id: 3,
+      operator: {
+        title: 'switchMap(...)',
+        firstPart: 'switchMap(',
+        secondPart: ')',
+        operator: (scheduler) => map((x: any) => (x + 10)),
+        argumentsType: 'observable',
+        required: true,
+      },
+      value: []
     }
   ];
 
   values: any[] = [
-    5, 10, (x) => x > 3, (x) => x + 10
+    {
+      title: '5',
+      value: 5
+    },
+    {
+      title: '10',
+      value: 10
+    },
+    {
+      title: '(x) => x > 3',
+      value: (x) => x > 3
+    },
+    {
+      title: '(x) => x + 10',
+      value: (x) => x + 10
+    }
   ];
 
   source$ = new Subject();
@@ -67,41 +98,113 @@ export class PuzzleComponent {
     return interval(10, scheduler).pipe(debounceTime(5, scheduler));
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      console.log(event.previousIndex,
-        event.currentIndex);
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-
-      this.source$.next(this.solution[0]);
     }
   }
 
-  dropSource(event: CdkDragDrop<string[]>) {
-    if (event.container.data.length) {
-      this.moveOutSource(event.container.data,
-        event.previousContainer.data,
-        0,
-        0);
+  dropObservable(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
 
-    transferArrayItem(event.previousContainer.data,
-      event.container.data,
-      event.previousIndex + 1,
-      0);
-
-    this.source$.next(this.solution[0]);
+    this.source$.next(this.tree);
   }
 
-  moveOutSource(prevContainer, container, prevIndex, index) {
-    transferArrayItem(prevContainer,
-      container,
-      prevIndex,
-      index);
+  dropOperator(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+
+    this.source$.next(this.tree);
+  }
+
+  dropValue(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+
+    this.source$.next(this.tree);
+  }
+
+  getIds(index = -1) {
+    const idsList = [];
+    if (index !== -1) {
+      idsList.push('src-values');
+    }
+    for (let i = 0; i < 32; i++) {
+      if (index !== i) {
+        idsList.push(`dest-value-${i}`);
+      }
+    }
+    return idsList;
+  }
+
+  dblClickObservable(event) {
+    this.transferObservable();
+
+    this.source$.next(this.tree);
+  }
+
+  dblClickOperator(event, container, index) {
+    this.transferOperator(container, index);
+
+    this.source$.next(this.tree);
+  }
+
+  dblClickValue(event, container, index) {
+    event.stopPropagation();
+    this.transferValue(container, index);
+    this.source$.next(this.tree);
+  }
+
+  transferObservable() {
+    for (let i = this.tree.operators.length - 1; i >= 0; i--) {
+      this.transferOperator(this.tree.operators, i);
+    }
+    transferArrayItem(this.tree.root,
+      this.sources,
+      0,
+      this.sources.length);
+  }
+
+  transferOperator(container, index) {
+    if (container[index].value.length) {
+      for (let i = container[index].value.length - 1; i >= 0; i--) {
+        this.transferValue(container[index].value, i);
+      }
+    }
+    transferArrayItem(container,
+      this.operators,
+      index,
+      this.operators.length);
+  }
+
+  transferValue(container, index) {
+    transferArrayItem(container,
+      this.values,
+      index,
+      this.values.length);
   }
 }
