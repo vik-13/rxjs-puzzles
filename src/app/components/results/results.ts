@@ -43,7 +43,6 @@ export class ResultsComponent {
     const scheduler = new VirtualTimeScheduler(undefined, 100);
 
     if (this.validate(this.source)) {
-      console.log('isValid');
       this.source.root[0].stream(scheduler)
         .pipe(...this.source.operators.map((item) => item.operator.operator(item.value[0].value, scheduler)))
         .pipe(observeOn(scheduler))
@@ -54,14 +53,12 @@ export class ResultsComponent {
           return a.concat(b);
         }, []))
         .subscribe((list) => {
-          console.log(list);
           this.outputSource$.next(list);
         });
 
       scheduler.flush();
       stop$.next();
     } else {
-      console.log('isNotValid');
       this.outputSource$.next([]);
     }
   }

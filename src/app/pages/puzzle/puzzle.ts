@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { interval, Subject } from 'rxjs';
+import { interval, Subject, timer } from 'rxjs';
 import { debounceTime, filter, map } from 'rxjs/operators';
 
 @Component({
@@ -15,11 +15,17 @@ export class PuzzleComponent {
     operators: [],
   };
 
-  sources: any[] = [
+  observables: any[] = [
     {
       title: 'interval(10)',
       stream: (scheduler) => {
         return interval(10, scheduler);
+      }
+    },
+    {
+      title: 'timer(0, 10)',
+      stream: (scheduler) => {
+        return timer(0, 10, scheduler);
       }
     }
   ];
@@ -109,6 +115,36 @@ export class PuzzleComponent {
     }
   }
 
+  dropObservableBack(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      this.transferObservable(event.currentIndex);
+    }
+
+    this.source$.next(this.tree);
+  }
+
+  dropOperatorBack(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      this.transferOperator(event.previousContainer.data, event.previousIndex, event.currentIndex);
+    }
+
+    this.source$.next(this.tree);
+  }
+
+  dropArgBack(event: CdkDragDrop<any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      this.transferValue(event.previousContainer.data, event.previousIndex, event.currentIndex);
+    }
+
+    this.source$.next(this.tree);
+  }
+
   dropObservable(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -135,7 +171,7 @@ export class PuzzleComponent {
     this.source$.next(this.tree);
   }
 
-  dropValue(event: CdkDragDrop<any>) {
+  dropArg(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -151,11 +187,11 @@ export class PuzzleComponent {
   getIds(index = -1) {
     const idsList = [];
     if (index !== -1) {
-      idsList.push('src-values');
+      idsList.push('src-arguments');
     }
     for (let i = 0; i < 32; i++) {
       if (index !== i) {
-        idsList.push(`dest-value-${i}`);
+        idsList.push(`dest-argument-${i}`);
       }
     }
     return idsList;
@@ -173,23 +209,23 @@ export class PuzzleComponent {
     this.source$.next(this.tree);
   }
 
-  dblClickValue(event, container, index) {
+  dblClickArg(event, container, index) {
     event.stopPropagation();
     this.transferValue(container, index);
     this.source$.next(this.tree);
   }
 
-  transferObservable() {
+  transferObservable(nextIndex = this.observables.length) {
     for (let i = this.tree.operators.length - 1; i >= 0; i--) {
       this.transferOperator(this.tree.operators, i);
     }
     transferArrayItem(this.tree.root,
-      this.sources,
+      this.observables,
       0,
-      this.sources.length);
+      nextIndex);
   }
 
-  transferOperator(container, index) {
+  transferOperator(container, index, nextIndex = this.operators.length) {
     if (container[index].value.length) {
       for (let i = container[index].value.length - 1; i >= 0; i--) {
         this.transferValue(container[index].value, i);
@@ -198,13 +234,13 @@ export class PuzzleComponent {
     transferArrayItem(container,
       this.operators,
       index,
-      this.operators.length);
+      nextIndex);
   }
 
-  transferValue(container, index) {
+  transferValue(container, index, nextIndex = this.values.length) {
     transferArrayItem(container,
       this.values,
       index,
-      this.values.length);
+      nextIndex);
   }
 }

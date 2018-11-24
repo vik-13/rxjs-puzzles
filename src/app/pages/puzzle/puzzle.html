@@ -4,34 +4,34 @@
       <mat-card-title>Observables</mat-card-title>
       <mat-card-content>
         <div class="list"
+             #srcObservables="cdkDropList"
              cdkDropList
-             [cdkDropListData]="sources"
-             [cdkDropListConnectedTo]="'main'"
-             (cdkDropListDropped)="drop($event)">
-          <mat-card class="source" cdkDrag *ngFor="let source of sources">{{source.title}}</mat-card>
+             [cdkDropListData]="observables"
+             [cdkDropListConnectedTo]="destObservables"
+             (cdkDropListDropped)="dropObservableBack($event)">
+          <mat-card class="source" cdkDrag *ngFor="let source of observables">{{source.title}}</mat-card>
         </div>
       </mat-card-content>
     </mat-card>
     <mat-card class="controls">
       <mat-card-title>Operators</mat-card-title>
       <div class="list"
-           id="operatorsList"
            cdkDropList
-           #operatorsList="cdkDropList"
+           #srcOperators="cdkDropList"
            [cdkDropListData]="operators"
-           [cdkDropListConnectedTo]="'destinationOperators'"
-           (cdkDropListDropped)="drop($event)">
+           [cdkDropListConnectedTo]="destOperators"
+           (cdkDropListDropped)="dropOperatorBack($event)">
         <mat-card class="operator" cdkDrag *ngFor="let operator of operators">{{operator.operator.title}}</mat-card>
       </div>
     </mat-card>
     <mat-card class="controls">
       <mat-card-title>Operators</mat-card-title>
       <div class="list"
-           id="src-values"
+           id="src-arguments"
            cdkDropList
            [cdkDropListData]="values"
            [cdkDropListConnectedTo]="getIds()"
-           (cdkDropListDropped)="drop($event)">
+           (cdkDropListDropped)="dropArgBack($event)">
         <mat-card class="value" cdkDrag *ngFor="let value of values">{{value.title}}</mat-card>
       </div>
     </mat-card>
@@ -39,27 +39,30 @@
   <div class="main-container">
     <div class="main-stream-container">
       <div class="stream">
-        <div class="observable-container" id="main"
+        <div class="observable-container"
+             #destObservables="cdkDropList"
              cdkDropList
              [cdkDropListData]="tree.root"
+             [cdkDropListConnectedTo]="srcObservables"
              (cdkDropListDropped)="dropObservable($event)">
           <mat-card class="observable" (dblclick)="dblClickObservable($event)" cdkDrag *ngFor="let value of tree.root">{{value.title}}</mat-card>
         </div>
         <div class="operators-container"
-             id="destinationOperators"
+             #destOperators="cdkDropList"
              cdkDropList
-             [cdkDropListConnectedTo]="operatorsList"
+             [cdkDropListConnectedTo]="srcOperators"
              [cdkDropListData]="tree.operators"
              (cdkDropListDropped)="dropOperator($event)">
           <mat-card class="operator" cdkDrag (dblclick)="dblClickOperator($event, tree.operators, index)" *ngFor="let operator of tree.operators; let index = index">
             <span>{{operator.operator.firstPart}}</span>
-            <span [id]="'dest-value-' + operator.id" class="value-container"
+            <span class="value-container"
+                  [id]="'dest-argument-' + operator.id"
                   cdkDropList
                   [cdkDropListData]="operator.value"
                   [cdkDropListOrientation]="'horizontal'"
                   [cdkDropListConnectedTo]="getIds(operator.id)"
-                  (cdkDropListDropped)="dropValue($event)">
-              <mat-card class="value" cdkDrag (dblclick)="dblClickValue($event, operator.value, index)" *ngFor="let value of operator.value; let index = index;">{{value.title}}</mat-card>
+                  (cdkDropListDropped)="dropArg($event)">
+              <mat-card class="value" cdkDrag (dblclick)="dblClickArg($event, operator.value, index)" *ngFor="let value of operator.value; let index = index;">{{value.title}}</mat-card>
             </span>
             <span>{{operator.operator.secondPart}}</span>
           </mat-card>
