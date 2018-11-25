@@ -1,21 +1,18 @@
 import { NgModule } from '@angular/core';
-import { SourceComponent } from './source';
+import { ArgComponent } from './arg';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
-    SourceComponent
+    ArgComponent
   ],
   imports: [
     CommonModule,
-
-    MatCardModule,
-    DragDropModule
+    MatCardModule
   ],
   exports: [
-    SourceComponent
+    ArgComponent
   ]
 })
-export class SourceModule {}
+export class ArgModule {}

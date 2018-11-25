@@ -1,0 +1,6 @@
+TODO: Add dashboard;
+TODO: Show message in case of streams are equal;
+TODO: Show error at the right of operator if there is no arguments or arguments is invalid;
+TODO: Mobile view support;
+TODO: Add animations;
+TODO: Store puzzles somewhere? Firestore?;

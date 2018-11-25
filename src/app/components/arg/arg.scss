@@ -1,0 +1,22 @@
+@import "~src/assets/scss/variables";
+
+:host {
+  display: table;
+  margin: 8px 8px;
+
+  mat-card {
+    background-color: $color3;
+    white-space: nowrap;
+  }
+
+  &.inner,
+  &.cdk-drag-placeholder{
+    display: inline-block;
+    margin: 0;
+
+    mat-card {
+      padding: 10px;
+      margin: -10px 8px;
+    }
+  }
+}

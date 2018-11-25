@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { PuzzleModule } from './pages/puzzle/puzzle.module';
 import { MatToolbarModule } from '@angular/material';
+import { PuzzlesModule } from './puzzles/puzzles.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { MatToolbarModule } from '@angular/material';
 
     MatToolbarModule,
     DashboardModule,
-    PuzzleModule
+    PuzzleModule,
+
+    PuzzlesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

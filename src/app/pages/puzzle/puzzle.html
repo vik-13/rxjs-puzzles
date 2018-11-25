@@ -6,10 +6,14 @@
         <div class="list"
              #srcObservables="cdkDropList"
              cdkDropList
-             [cdkDropListData]="observables"
+             [cdkDropListData]="puzzle.observables"
              [cdkDropListConnectedTo]="destObservables"
              (cdkDropListDropped)="dropObservableBack($event)">
-          <mat-card class="source" cdkDrag *ngFor="let source of observables">{{source.title}}</mat-card>
+          <rxp-observable cdkDrag
+                          (dblclick)="dblClickSrcObservables($event, index);"
+                          *ngFor="let observable of puzzle.observables; let index = index;">
+            {{observable.title}}
+          </rxp-observable>
         </div>
       </mat-card-content>
     </mat-card>
@@ -18,10 +22,14 @@
       <div class="list"
            cdkDropList
            #srcOperators="cdkDropList"
-           [cdkDropListData]="operators"
+           [cdkDropListData]="puzzle.operators"
            [cdkDropListConnectedTo]="destOperators"
            (cdkDropListDropped)="dropOperatorBack($event)">
-        <mat-card class="operator" cdkDrag *ngFor="let operator of operators">{{operator.operator.title}}</mat-card>
+        <rxp-operator cdkDrag
+                      (dblclick)="dblClickSrcOperators($event, index);"
+                      *ngFor="let operator of puzzle.operators; let index = index;">
+          {{operator.operator.title}}
+        </rxp-operator>
       </div>
     </mat-card>
     <mat-card class="controls">
@@ -29,10 +37,14 @@
       <div class="list"
            id="src-arguments"
            cdkDropList
-           [cdkDropListData]="values"
+           [cdkDropListData]="puzzle.args"
            [cdkDropListConnectedTo]="getIds()"
            (cdkDropListDropped)="dropArgBack($event)">
-        <mat-card class="value" cdkDrag *ngFor="let value of values">{{value.title}}</mat-card>
+        <rxp-arg cdkDrag
+                 (dblclick)="dblClickSrcArgs($event, index);"
+                 *ngFor="let value of puzzle.args; let index = index;">
+          {{value.title}}
+        </rxp-arg>
       </div>
     </mat-card>
   </div>
@@ -45,7 +57,12 @@
              [cdkDropListData]="tree.root"
              [cdkDropListConnectedTo]="srcObservables"
              (cdkDropListDropped)="dropObservable($event)">
-          <mat-card class="observable" (dblclick)="dblClickObservable($event)" cdkDrag *ngFor="let value of tree.root">{{value.title}}</mat-card>
+          <rxp-observable [inner]="true"
+                          cdkDrag
+                          (dblclick)="dblClickObservable($event, index);"
+                          *ngFor="let observable of tree.root; let index = index;">
+            {{observable.title}}
+          </rxp-observable>
         </div>
         <div class="operators-container"
              #destOperators="cdkDropList"
@@ -53,8 +70,12 @@
              [cdkDropListConnectedTo]="srcOperators"
              [cdkDropListData]="tree.operators"
              (cdkDropListDropped)="dropOperator($event)">
-          <mat-card class="operator" cdkDrag (dblclick)="dblClickOperator($event, tree.operators, index)" *ngFor="let operator of tree.operators; let index = index">
-            <span>{{operator.operator.firstPart}}</span>
+
+          <rxp-operator [inner]="true"
+                        cdkDrag
+                        (dblclick)="dblClickOperator($event, tree.operators, index);"
+                        *ngFor="let operator of tree.operators; let index = index;">
+            <span>{{operator.operator.left}}</span>
             <span class="value-container"
                   [id]="'dest-argument-' + operator.id"
                   cdkDropList
@@ -62,10 +83,16 @@
                   [cdkDropListOrientation]="'horizontal'"
                   [cdkDropListConnectedTo]="getIds(operator.id)"
                   (cdkDropListDropped)="dropArg($event)">
-              <mat-card class="value" cdkDrag (dblclick)="dblClickArg($event, operator.value, index)" *ngFor="let value of operator.value; let index = index;">{{value.title}}</mat-card>
-            </span>
-            <span>{{operator.operator.secondPart}}</span>
-          </mat-card>
+
+                <rxp-arg [inner]="true"
+                         cdkDrag
+                         (dblclick)="dblClickArg($event, operator.value, index);"
+                        *ngFor="let value of operator.value; let index = index;">
+                  {{value.title}}
+                </rxp-arg>
+              </span>
+            <span>{{operator.operator.right}}</span>
+          </rxp-operator>
         </div>
       </div>
     </div>

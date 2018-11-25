@@ -1,26 +1,45 @@
-import { Sources } from './sources';
 import { Operators } from './operators';
+import { interval, timer } from 'rxjs';
 
 export interface Puzzle {
+  code: string;
   title: string;
   description?: string;
-  sources: any[];
+  observables: { title: string, value: Function }[];
   operators: any[];
-  functions: any[];
+  args: { title: string, value: number|Function }[];
   result: any[];
 }
 
-export interface Puzzles {
-  [id: string]: Puzzle;
-}
-
-export const puzzles: Puzzles = {
-  '0': {
+export const puzzles: Puzzle[] = [
+  {
+    code: '001',
     title: 'Map',
     description: 'Basic Map operator',
-    sources: [Sources.of, Sources.interval],
-    operators: [Operators.map, Operators.filter],
-    functions: ['(a) => a * 10'],
+    observables: [{
+      title: 'timer(0, 10)',
+      value: (scheduler) => timer(0, 10, scheduler)
+    }, {
+      title: 'interval(10)',
+      value: (scheduler) => interval(10, scheduler)
+    }],
+    operators: [
+      Operators.debounceTime,
+      Operators.map
+    ],
+    args: [{
+      title: '5',
+      value: 5
+    }, {
+      title: '10',
+      value: 10
+    }, {
+      title: 'x => x + 20',
+      value: x => x + 20
+    }, {
+      title: 'x => x < 5',
+      value: x => x < 5
+    }],
     result: []
   }
-};
+];

@@ -1,0 +1,12 @@
+.puzzles-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 32px;
+  overflow: auto;
+
+  mat-card {
+    width: 100px;
+    height: 100px;
+    flex: 0 0 100px;
+  }
+}

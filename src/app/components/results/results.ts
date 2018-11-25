@@ -43,7 +43,7 @@ export class ResultsComponent {
     const scheduler = new VirtualTimeScheduler(undefined, 100);
 
     if (this.validate(this.source)) {
-      this.source.root[0].stream(scheduler)
+      this.source.root[0].value(scheduler)
         .pipe(...this.source.operators.map((item) => item.operator.operator(item.value[0].value, scheduler)))
         .pipe(observeOn(scheduler))
         .pipe(timestamp(scheduler))
@@ -90,7 +90,7 @@ export class ResultsComponent {
 
     let isValid = true;
     this.source.operators.forEach((operator) => {
-      if (operator.operator.required && !operator.value.length) {
+      if (!operator.value.length) {
         isValid = false;
       }
     });
