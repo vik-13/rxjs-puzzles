@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { StreamComponent } from './stream';
 import { CommonModule } from '@angular/common';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatCardModule } from '@angular/material';
+import { BeadModule } from '../bead/bead.module';
 
 @NgModule({
   declarations: [
@@ -11,8 +10,7 @@ import { MatCardModule } from '@angular/material';
   imports: [
     CommonModule,
 
-    DragDropModule,
-    MatCardModule
+    BeadModule
   ],
   exports: [
     StreamComponent

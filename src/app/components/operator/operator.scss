@@ -5,4 +5,17 @@
   margin: 8px 8px;
   background-color: $color4;
   white-space: nowrap;
+
+  .error-message {
+    display: none;
+    position: absolute;
+    background-color: $warn;
+    padding: 7px;
+    top: 9px;
+    left: calc(100% + 16px);
+  }
+
+  &.inner .error-message {
+    display: block;
+  }
 }

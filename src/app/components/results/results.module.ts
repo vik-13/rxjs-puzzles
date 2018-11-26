@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ResultsComponent } from './results';
 import { CommonModule } from '@angular/common';
-import { BeadModule } from '../bead/bead.module';
 import { MatCardModule } from '@angular/material';
+import { StreamModule } from '../stream/stream.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material';
   imports: [
     CommonModule,
     MatCardModule,
-    BeadModule
+    StreamModule
   ],
   exports: [
     ResultsComponent

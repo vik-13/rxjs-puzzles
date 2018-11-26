@@ -8,25 +8,4 @@
   right: 0;
   padding: 8px 0;
   background-color: #303030;
-
-  .stream-wrapper {
-    height: 50px;
-
-    .stream {
-      height: 100%;
-      width: 800px;
-      position: relative;
-      margin: 0 auto;
-
-      &:before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background-color: $primary;
-      }
-    }
-  }
 }

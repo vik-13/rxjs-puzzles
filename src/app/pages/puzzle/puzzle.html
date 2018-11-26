@@ -72,6 +72,7 @@
              (cdkDropListDropped)="dropOperator($event)">
 
           <rxp-operator [inner]="true"
+                        [operator]="operator"
                         cdkDrag
                         (dblclick)="dblClickOperator($event, tree.operators, index);"
                         *ngFor="let operator of tree.operators; let index = index;">

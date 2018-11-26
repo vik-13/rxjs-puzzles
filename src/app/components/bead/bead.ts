@@ -12,7 +12,7 @@ export class BeadComponent {
     return this._element;
   }
   set element(value) {
-    this.renderer.setStyle(this.elementRef.nativeElement, 'left', `${(((value.time / 100) * 800))}px`);
+    this.renderer.setStyle(this.elementRef.nativeElement, 'left', `${value.time}%`);
     this._element = value;
   }
   private _element;

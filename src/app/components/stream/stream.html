@@ -1,19 +1,15 @@
-<div class="stream-container">
-  <div class="observable-container"
-       [id]="dropListId"
-       cdkDropList
-       #observableDropList="cdkDropList"
-       [cdkDropListData]="observable"
-       [cdkDropListConnectedTo]="observableSource"
-       (cdkDropListDropped)="drop($event)">
-    <mat-card class="source" cdkDrag *ngFor="let source of observable">{{source.title}}</mat-card>
+<div class="stream-wrapper">
+  <div class="stream-background">
+    <div class="line"></div>
+    <div class="tick" *ngFor="let tick of ticks" [class.visible]="tick.visible" [style.left]="tick.left">
+      <span>{{tick.value}}</span>
+    </div>
   </div>
-  <div class="operators-container"
-       [id]="operatorsDropListId"
-       cdkDropList
-       #operatorsDropList="cdkDropList"
-       [cdkDropListConnectedTo]="operatorsSource"
-       [cdkDropListData]="operators">
-    Place <strong>Operators</strong> here.
+  <div class="stream">
+    <ng-container *ngIf="stream$ | async as stream">
+      <rxp-bead
+        [element]="bead"
+        *ngFor="let bead of stream">{{bead.value}}</rxp-bead>
+    </ng-container>
   </div>
 </div>

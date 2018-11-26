@@ -1,47 +1,34 @@
 import { ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
 import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'rxp-stream',
-  exportAs: 'Stream',
   templateUrl: 'stream.html',
   styleUrls: ['stream.scss']
 })
 export class StreamComponent {
-
-  dropListId = `drop-list-${+new Date}`;
-  operatorsDropListId = `operators-drop-list-${+new Date}`;
-
-  @Input() observableSource;
-  @Input() operatorsSource;
-
-  @ViewChild('observableDropList')
-  get observableDropList(): CdkDropList { return this._observableDropList; }
-  set observableDropList(value: CdkDropList) {
-    this._observableDropList = value;
+  @Input()
+  get stream$() { return this._stream$; }
+  set stream$(value: Observable<any>) {
+    this._stream$ = value;
   }
-  private _observableDropList: CdkDropList;
+  private _stream$: Observable<any>;
 
-  @ViewChild('operatorsDropList')
-  get operatorsDropList(): CdkDropList { return this._operatorsDropList; }
-  set operatorsDropList(value: CdkDropList) {
-    this._operatorsDropList = value;
+  ticks: {value: number, left: string, visible: boolean}[] = [];
+
+  constructor() {
+    // this.generateTicks();
   }
-  private _operatorsDropList: CdkDropList;
 
-  observable = [];
-  operators = [];
-
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      console.log(event.previousIndex,
-        event.currentIndex);
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+  generateTicks() {
+    for (let i = 0; i <= 100; i++) {
+      this.ticks.push({
+        value: i,
+        left: `${i}%`,
+        visible: !(i % 5)
+      });
     }
   }
 }

@@ -1,8 +1,72 @@
-.observable-container {
-  min-height: 64px;
-  background-color: white;
-}
-.operators-container {
-  min-height: 64px;
-  background-color: white;
+@import "~src/assets/scss/variables";
+
+.stream-wrapper {
+  height: 64px;
+  position: relative;
+
+  .stream-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 128px);
+    height: 64px;
+    margin: 0 64px;
+
+    .line {
+      position: absolute;
+      margin: 0 -32px;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: #fff;
+    }
+
+    .tick {
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      width: 1px;
+      height: 7px;
+      top: 50%;
+      margin-top: -3px;
+      background-color: #fff;
+      font-size: 11px;
+      color: #fff;
+
+      span {
+        position: relative;
+        top: 24px;
+        visibility: hidden;
+      }
+
+      &.visible {
+        height: 13px;
+        margin-top: -6px;
+
+        span {
+          visibility: visible;
+        }
+      }
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: -32px;
+      top: 50%;
+      border: solid #fff;
+      border-width: 0 1px 1px 0;
+      display: inline-block;
+      padding: 3px;
+      margin-top: -3px;
+      transform: rotate(-45deg);
+    }
+  }
+
+  .stream {
+    height: 100%;
+    position: relative;
+    margin: 0 64px;
+  }
 }
