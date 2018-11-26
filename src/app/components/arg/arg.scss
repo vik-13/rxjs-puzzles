@@ -3,20 +3,12 @@
 :host {
   display: table;
   margin: 8px 8px;
+  background-color: $color3;
+  white-space: nowrap;
 
-  mat-card {
-    background-color: $color3;
-    white-space: nowrap;
-  }
-
-  &.inner,
-  &.cdk-drag-placeholder{
+  &.inner {
     display: inline-block;
-    margin: 0;
-
-    mat-card {
-      padding: 10px;
-      margin: -10px 8px;
-    }
+    padding: 10px;
+    margin: -10px 8px;
   }
 }

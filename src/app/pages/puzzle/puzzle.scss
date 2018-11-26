@@ -21,41 +21,13 @@
     flex: 1;
     height: 100%;
     background-color: #202020;
-
-    .solution {
-      height: 100%;
-      padding: 32px 128px 232px;
-      overflow: auto;
-
-      .source {
-        display: table;
-        margin: 8px 0;
-        background-color: $color1;
-      }
-
-      .operator {
-        display: table;
-        margin: 8px 0;
-        background-color: $color4;
-      }
-
-    }
   }
-}
-
-
-.pipes-container {
-  min-height: 64px;
-}
-
-
-.main-stream-container {
-  padding: 32px 64px 132px;
 }
 
 .main-stream-container {
   height: 100%;
   overflow: auto;
+  padding: 32px 64px 132px;
 
   .stream {
     display: inline-block;
@@ -64,6 +36,10 @@
       position: relative;
       min-height: 40px;
       min-width: 100px;
+
+      >* {
+        display: inline-block;
+      }
 
       &:before {
         content: "Place observable here";
@@ -79,6 +55,10 @@
       position: relative;
       min-height: 40px;
       min-width: 100px;
+
+      >* {
+        margin-left: 32px;
+      }
     }
 
     .value-container {
@@ -86,28 +66,22 @@
       min-width: 32px;
       min-height: 27px;
       margin: -8px 0;
-    }
 
-    mat-card {
-      display: table;
-      margin: 8px 0;
-
-      &.observable {
-        display: inline-block;
-        background-color: $color1;
-      }
-
-      &.operator {
-        margin-left: 32px;
-        background-color: $color4;
-      }
-
-      &.value {
+      >* {
         display: inline-block;
         padding: 10px;
         margin: -10px 8px;
-        background-color: $color3;
       }
     }
   }
 }
+
+///* Animate items as they're being sorted. */
+//.cdk-drop-list-dragging .cdk-drag {
+//  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+//}
+//
+///* Animate an item that has been dropped. */
+//.cdk-drag-animating {
+//  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+//}
