@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'rxp-operator',
   templateUrl: 'operator.html',
-  styleUrls: ['operator.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['operator.scss']
 })
 export class OperatorComponent {
   @Input()
@@ -15,16 +14,20 @@ export class OperatorComponent {
   @Input()
   get operator() { return this._operator; }
   set operator(operatorContainer) {
-    console.log('set operator');
     this._operator = operatorContainer;
-    this.isValid = true;
-    if (!operatorContainer.value.length) {
-      this.isValid = false;
-    } else if (typeof operatorContainer.value[0].value !== operatorContainer.operator.argumentType) {
-      this.isValid = false;
-    }
   }
   private _operator;
 
-  isValid = true;
+  isValid() {
+    let isValid = true;
+    if (!this.operator) {
+      return isValid;
+    }
+    if (!this.operator.values.length) {
+      isValid = false;
+    } else if (typeof this.operator.values[0].value !== this.operator.argType) {
+      isValid = false;
+    }
+    return isValid;
+  }
 }

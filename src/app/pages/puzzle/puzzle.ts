@@ -12,106 +12,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PuzzleComponent {
   tree = {
-    root: [],
+    observable: [],
     operators: [],
   };
-
-  // observables: any[] = [
-  //   {
-  //     title: 'interval(10)',
-  //     stream: (scheduler) => {
-  //       return interval(10, scheduler);
-  //     }
-  //   },
-  //   {
-  //     title: 'timer(0, 10)',
-  //     stream: (scheduler) => {
-  //       return timer(0, 10, scheduler);
-  //     }
-  //   }
-  // ];
-  //
-  // operators: any[] = [
-  //   {
-  //     id: 0,
-  //     operator: {
-  //       title: 'debounceTime(...)',
-  //       firstPart: 'debounceTime(',
-  //       secondPart: ')',
-  //       operator: (arg, scheduler) => debounceTime(arg, scheduler),
-  //       argumentsType: 'number',
-  //       required: true,
-  //     },
-  //     value: []
-  //   },
-  //   {
-  //     id: 1,
-  //     operator: {
-  //       title: 'filter(...)',
-  //       firstPart: 'filter(',
-  //       secondPart: ')',
-  //       operator: (arg, scheduler) => filter(arg),
-  //       argumentsType: 'function',
-  //       required: true,
-  //     },
-  //     value: []
-  //   }, {
-  //     id: 2,
-  //     operator: {
-  //       title: 'map(...)',
-  //       firstPart: 'map(',
-  //       secondPart: ')',
-  //       operator: (arg, scheduler) => map(arg),
-  //       argumentsType: 'function',
-  //       required: true,
-  //     },
-  //     value: []
-  //   }, {
-  //     id: 3,
-  //     operator: {
-  //       title: 'switchMap(...)',
-  //       firstPart: 'switchMap(',
-  //       secondPart: ')',
-  //       operator: (scheduler) => map((x: any) => (x + 10)),
-  //       argumentsType: 'observable',
-  //       required: true,
-  //     },
-  //     value: []
-  //   }
-  // ];
-  //
-  // values: any[] = [
-  //   {
-  //     title: '5',
-  //     value: 5
-  //   },
-  //   {
-  //     title: '10',
-  //     value: 10
-  //   },
-  //   {
-  //     title: '(x) => x > 3',
-  //     value: (x) => x > 3
-  //   },
-  //   {
-  //     title: '(x) => x + 10',
-  //     value: (x) => x + 10
-  //   }
-  // ];
 
   puzzle;
 
   source$ = new Subject();
 
-  destination = (scheduler) => {
-    return interval(10, scheduler).pipe(debounceTime(5, scheduler));
-  }
-
   constructor(private puzzlesService: PuzzlesService, private router: Router,
               private route: ActivatedRoute) {
     route.params.subscribe((params) => {
       if (params.id) {
-        this.puzzle = puzzlesService.getConvertedByCode(params.id);
+        this.puzzle = puzzlesService.getPreparedByCode(params.id);
       } else {
         router.navigate(['/dashboard']).then();
       }
@@ -136,7 +49,7 @@ export class PuzzleComponent {
       this.transferObservable(event.currentIndex);
     }
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dropOperatorBack(event: CdkDragDrop<any>) {
@@ -146,7 +59,7 @@ export class PuzzleComponent {
       this.transferOperator(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dropArgBack(event: CdkDragDrop<any>) {
@@ -156,7 +69,7 @@ export class PuzzleComponent {
       this.transferArg(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dropObservable(event: CdkDragDrop<any>) {
@@ -173,7 +86,7 @@ export class PuzzleComponent {
         0);
     }
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dropOperator(event: CdkDragDrop<any>) {
@@ -186,7 +99,7 @@ export class PuzzleComponent {
         event.currentIndex);
     }
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dropArg(event: CdkDragDrop<any>) {
@@ -203,7 +116,7 @@ export class PuzzleComponent {
         0);
     }
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   getIds(index = -1) {
@@ -222,57 +135,57 @@ export class PuzzleComponent {
   dblClickSrcObservables(event, index) {
     this.transferSrcToDestObservable(index);
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dblClickSrcOperators(event, index) {
     this.transferSrcToDestOperator(index);
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dblClickSrcArgs(event, index) {
     event.stopPropagation();
     this.transferSrcToDestArg(index);
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dblClickObservable(event) {
     this.transferObservable();
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dblClickOperator(event, container, index) {
     this.transferOperator(container, index);
 
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   dblClickArg(event, container, index) {
     event.stopPropagation();
     this.transferArg(container, index);
-    this.source$.next(this.tree);
+    this.publishStream();
   }
 
   transferObservable(nextIndex = this.puzzle.observables.length) {
-    // for (let i = this.tree.operators.length - 1; i >= 0; i--) {
-    //   this.transferOperator(this.tree.operators, i);
-    // }
-    transferArrayItem(this.tree.root,
+    for (let i = this.tree.operators.length - 1; i >= 0; i--) {
+      this.transferOperator(this.tree.operators, i);
+    }
+    transferArrayItem(this.tree.observable,
       this.puzzle.observables,
       0,
       nextIndex);
   }
 
-  transferOperator(container, index, nextIndex = this.puzzle.operators.length) {
-    if (container[index].value.length) {
-      for (let i = container[index].value.length - 1; i >= 0; i--) {
-        this.transferArg(container[index].value, i);
+  transferOperator(container, index, nextIndex = this.puzzle.operatorsCollection.length) {
+    if (container[index].values.length) {
+      for (let i = container[index].values.length - 1; i >= 0; i--) {
+        this.transferArg(container[index].values, i);
       }
     }
     transferArrayItem(container,
-      this.puzzle.operators,
+      this.puzzle.operatorsCollection,
       index,
       nextIndex);
   }
@@ -285,19 +198,19 @@ export class PuzzleComponent {
   }
 
   transferSrcToDestObservable(currentIndex) {
-    if (this.tree.root.length) {
+    if (this.tree.observable.length) {
       this.transferObservable(this.puzzle.observables.length);
     }
 
     transferArrayItem(this.puzzle.observables,
-      this.tree.root,
+      this.tree.observable,
       currentIndex,
       0);
   }
 
   transferSrcToDestOperator(currentIndex) {
-    if (this.tree.root.length) {
-      transferArrayItem(this.puzzle.operators,
+    if (this.tree.observable.length) {
+      transferArrayItem(this.puzzle.operatorsCollection,
         this.tree.operators,
         currentIndex,
         this.tree.operators.length);
@@ -307,23 +220,53 @@ export class PuzzleComponent {
   transferSrcToDestArg(currentIndex) {
     let nextIndex = -1;
     this.tree.operators.forEach((operator, index) => {
-      if (!operator.value.length && nextIndex === -1) {
+      if (!operator.values.length && nextIndex === -1) {
         nextIndex = index;
       }
     });
 
     if (nextIndex !== -1) {
       transferArrayItem(this.puzzle.args,
-        this.tree.operators[nextIndex].value,
+        this.tree.operators[nextIndex].values,
         currentIndex,
         0);
     } else if (this.tree.operators.length) {
       nextIndex = this.tree.operators.length - 1;
-      this.transferArg(this.tree.operators[nextIndex].value, 0);
+      this.transferArg(this.tree.operators[nextIndex].values, 0);
       transferArrayItem(this.puzzle.args,
-        this.tree.operators[nextIndex].value,
+        this.tree.operators[nextIndex].values,
         currentIndex,
         0);
+    }
+  }
+
+  publishStream() {
+    if (!this.tree.observable.length) {
+      this.source$.next({
+        valid: false
+      });
+    } else {
+      let isValid = true;
+      this.tree.operators.forEach((operatorContainer) => {
+        if (operatorContainer.argRequired) {
+          if (!operatorContainer.values.length) {
+            isValid = false;
+          } else if (typeof operatorContainer.values[0].value !== operatorContainer.argType) {
+            isValid = false;
+          }
+        }
+      });
+
+      if (isValid) {
+        this.source$.next({
+          valid: true,
+          data: this.tree
+        });
+      } else {
+        this.source$.next({
+          valid: false
+        });
+      }
     }
   }
 }

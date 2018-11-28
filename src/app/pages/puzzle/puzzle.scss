@@ -13,6 +13,20 @@
 
     .controls {
       margin: 8px 0;
+
+      .list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        &.arguments {
+          >* {
+            display: inline-block;
+            padding: 16px;
+            margin: 8px 8px;
+          }
+        }
+      }
     }
   }
 
@@ -30,7 +44,7 @@
   padding: 32px 64px 176px;
 
   .stream {
-    display: inline-block;
+    height: 100%;
 
     .observable-container {
       position: relative;
@@ -42,16 +56,21 @@
       }
 
       &:before {
-        content: "Place observable here";
+        content: "";
         position: absolute;
         left: 50%;
         top: 50%;
         white-space: nowrap;
         transform: translate(-50%, -50%);
+        color: #ccc;
+        font-size: 32px;
       }
     }
 
     .operators-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       position: relative;
       min-height: 40px;
       min-width: 100px;
@@ -62,26 +81,41 @@
     }
 
     .value-container {
-      display: inline-block;
+      display: flex;
+      align-items: center;
       min-width: 32px;
-      min-height: 27px;
-      margin: -8px 0;
+      height: 51px;
+      margin: -16px 0;
 
       >* {
         display: inline-block;
         padding: 10px;
-        margin: -10px 8px;
+        margin: 0 8px;
+      }
+    }
+
+    &.no-stream {
+      .observable-container {
+        height: 100%;
+
+        &:before {
+          content: "Place observable here";
+        }
+      }
+
+      .operators-container {
+        display: none;
       }
     }
   }
 }
 
-///* Animate items as they're being sorted. */
-//.cdk-drop-list-dragging .cdk-drag {
-//  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-//}
-//
-///* Animate an item that has been dropped. */
-//.cdk-drag-animating {
-//  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
-//}
+/* Animate items as they're being sorted. */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Animate an item that has been dropped. */
+.cdk-drag-animating {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+}

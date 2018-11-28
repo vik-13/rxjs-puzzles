@@ -1,9 +1,9 @@
 @import "~src/assets/scss/variables";
 
 :host {
-  display: table;
+  display: flex;
   margin: 8px 8px;
-  background-color: $color4;
+  background-color: $color1;
   white-space: nowrap;
 
   .error-message {

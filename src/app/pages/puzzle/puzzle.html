@@ -6,12 +6,12 @@
         <div class="list"
              #srcObservables="cdkDropList"
              cdkDropList
-             [cdkDropListData]="puzzle.observables"
+             [cdkDropListData]="puzzle?.observables"
              [cdkDropListConnectedTo]="destObservables"
              (cdkDropListDropped)="dropObservableBack($event)">
           <rxp-observable cdkDrag
                           (dblclick)="dblClickSrcObservables($event, index);"
-                          *ngFor="let observable of puzzle.observables; let index = index;">
+                          *ngFor="let observable of puzzle?.observables; let index = index;">
             {{observable.title}}
           </rxp-observable>
         </div>
@@ -22,27 +22,27 @@
       <div class="list"
            cdkDropList
            #srcOperators="cdkDropList"
-           [cdkDropListData]="puzzle.operators"
+           [cdkDropListData]="puzzle?.operatorsCollection"
            [cdkDropListConnectedTo]="destOperators"
            (cdkDropListDropped)="dropOperatorBack($event)">
         <rxp-operator cdkDrag
                       (dblclick)="dblClickSrcOperators($event, index);"
-                      *ngFor="let operator of puzzle.operators; let index = index;">
-          {{operator.operator.title}}
+                      *ngFor="let operator of puzzle?.operatorsCollection; let index = index;">
+          {{operator.title}}
         </rxp-operator>
       </div>
     </mat-card>
     <mat-card class="controls">
       <mat-card-title>Arguments</mat-card-title>
-      <div class="list"
+      <div class="list arguments"
            id="src-arguments"
            cdkDropList
-           [cdkDropListData]="puzzle.args"
+           [cdkDropListData]="puzzle?.args"
            [cdkDropListConnectedTo]="getIds()"
            (cdkDropListDropped)="dropArgBack($event)">
         <rxp-arg cdkDrag
                  (dblclick)="dblClickSrcArgs($event, index);"
-                 *ngFor="let value of puzzle.args; let index = index;">
+                 *ngFor="let value of puzzle?.args; let index = index;">
           {{value.title}}
         </rxp-arg>
       </div>
@@ -50,17 +50,17 @@
   </div>
   <div class="main-container">
     <div class="main-stream-container">
-      <div class="stream">
+      <div class="stream" [class.no-stream]="!tree.observable.length">
         <div class="observable-container"
              #destObservables="cdkDropList"
              cdkDropList
-             [cdkDropListData]="tree.root"
+             [cdkDropListData]="tree.observable"
              [cdkDropListConnectedTo]="srcObservables"
              (cdkDropListDropped)="dropObservable($event)">
           <rxp-observable [inner]="true"
                           cdkDrag
                           (dblclick)="dblClickObservable($event, index);"
-                          *ngFor="let observable of tree.root; let index = index;">
+                          *ngFor="let observable of tree.observable; let index = index;">
             {{observable.title}}
           </rxp-observable>
         </div>
@@ -76,28 +76,28 @@
                         cdkDrag
                         (dblclick)="dblClickOperator($event, tree.operators, index);"
                         *ngFor="let operator of tree.operators; let index = index;">
-            <span>{{operator.operator.left}}</span>
+            <span>{{operator.left}}</span>
             <span class="value-container"
                   [id]="'dest-argument-' + operator.id"
                   cdkDropList
-                  [cdkDropListData]="operator.value"
+                  [cdkDropListData]="operator.values"
                   [cdkDropListOrientation]="'horizontal'"
                   [cdkDropListConnectedTo]="getIds(operator.id)"
                   (cdkDropListDropped)="dropArg($event)">
 
                 <rxp-arg [inner]="true"
                          cdkDrag
-                         (dblclick)="dblClickArg($event, operator.value, index);"
-                        *ngFor="let value of operator.value; let index = index;">
+                         (dblclick)="dblClickArg($event, operator.values, index);"
+                        *ngFor="let value of operator.values; let index = index;">
                   {{value.title}}
                 </rxp-arg>
               </span>
-            <span>{{operator.operator.right}}</span>
+            <span>{{operator.right}}</span>
           </rxp-operator>
         </div>
       </div>
     </div>
 
-    <rxp-results [source]="source$" [destination]="destination"></rxp-results>
+    <rxp-results [source]="source$" [result]="puzzle?.result"></rxp-results>
   </div>
 </div>

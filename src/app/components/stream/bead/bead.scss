@@ -1,4 +1,4 @@
-@import "~src/assets/scss/variables";
+@import "../../../../assets/scss/variables";
 
 :host {
   display: block;
@@ -17,4 +17,6 @@
   line-height: 32px;
   text-align: center;
   color: white;
+  cursor: default;
+  user-select: none;
 }

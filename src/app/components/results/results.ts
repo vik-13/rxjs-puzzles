@@ -24,14 +24,14 @@ export class ResultsComponent implements OnDestroy {
   private _source;
 
   @Input()
-  get destination() {
-    return this._destination;
+  get result() {
+    return this._result;
   }
-  set destination(value) {
-    this._destination = value || (() => of());
-    this.prepareOutputDestination();
+  set result(value) {
+    this._result = value || [];
+    this.outputDestination$.next(this._result);
   }
-  private _destination;
+  private _result;
 
   outputSource$ = new ReplaySubject(1);
   outputDestination$ = new ReplaySubject(1);
@@ -40,13 +40,11 @@ export class ResultsComponent implements OnDestroy {
   compareSubscription: Subscription;
 
   constructor() {
-    this.compareSubscription = this.outputSource$.pipe(switchMap((sourceList) => {
-      return this.outputDestination$.pipe(map(destinationList => [sourceList, destinationList]));
-    })).subscribe(([sourceList, destinationList]: [any[], any[]]) => {
+    this.compareSubscription = this.outputSource$.subscribe((sourceList: any[]) => {
       this.isEqual = true;
-      if (sourceList.length === destinationList.length) {
+      if (sourceList.length === this.result.length) {
         sourceList.forEach((item, index) => {
-          if (item.value !== destinationList[index].value || item.time !== destinationList[index].time) {
+          if (item.value !== this.result[index].value || item.time !== this.result[index].time) {
             this.isEqual = false;
           }
         });
@@ -61,9 +59,10 @@ export class ResultsComponent implements OnDestroy {
     const stop$ = new Subject();
     const scheduler = new VirtualTimeScheduler(undefined, 100);
 
-    if (this.validate()) {
-      this.source.root[0].value(scheduler)
-        .pipe(...this.source.operators.map((item) => item.operator.operator(item.value[0].value, scheduler)))
+    console.log(this.source);
+    if (this.source.valid) {
+      this.source.data.observable[0].func(scheduler)
+        .pipe(...this.source.data.operators.map((item) => item.func(item.values[0].value, scheduler)))
         .pipe(observeOn(scheduler))
         .pipe(timestamp(scheduler))
         .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
@@ -90,52 +89,33 @@ export class ResultsComponent implements OnDestroy {
     }
   }
 
-  prepareOutputDestination() {
-    const stop$ = new Subject();
-    const scheduler = new VirtualTimeScheduler(undefined, 100);
-
-    this.destination(scheduler)
-      .pipe(observeOn(scheduler))
-      .pipe(timestamp(scheduler))
-      .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
-      .pipe(takeUntil(stop$))
-      .pipe(reduce((a: any, b: any) => {
-        return a.concat(b);
-      }, []))
-      .pipe(map((list: any[]) => {
-        return list.map((item) => {
-          if (typeof item.value === 'boolean' ) {
-            item.value = item.value ? 'T' : 'F';
-          }
-          return item;
-        });
-      }))
-      .subscribe((list) => {
-        this.outputDestination$.next(list);
-      });
-
-    scheduler.flush();
-    stop$.next();
-  }
-
-  validate() {
-    if (!this.source.root.length) {
-      return false;
-    }
-
-    let isValid = true;
-    this.source.operators.forEach((operatorContainer) => {
-      if (!operatorContainer.value.length) {
-        isValid = false;
-      } else if (typeof operatorContainer.value[0].value !== operatorContainer.operator.argumentType) {
-        isValid = false;
-      }
-    });
-
-    console.log('isValid', isValid);
-
-    return isValid;
-  }
+  // prepareOutputDestination() {
+  //   const stop$ = new Subject();
+  //   const scheduler = new VirtualTimeScheduler(undefined, 100);
+  //
+  //   this.destination(scheduler)
+  //     .pipe(observeOn(scheduler))
+  //     .pipe(timestamp(scheduler))
+  //     .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
+  //     .pipe(takeUntil(stop$))
+  //     .pipe(reduce((a: any, b: any) => {
+  //       return a.concat(b);
+  //     }, []))
+  //     .pipe(map((list: any[]) => {
+  //       return list.map((item) => {
+  //         if (typeof item.value === 'boolean' ) {
+  //           item.value = item.value ? 'T' : 'F';
+  //         }
+  //         return item;
+  //       });
+  //     }))
+  //     .subscribe((list) => {
+  //       this.outputDestination$.next(list);
+  //     });
+  //
+  //   scheduler.flush();
+  //   stop$.next();
+  // }
 
   ngOnDestroy() {
     this.compareSubscription.unsubscribe();
