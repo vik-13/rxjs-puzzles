@@ -28,7 +28,11 @@ export class ResultsComponent implements OnDestroy {
     return this._result;
   }
   set result(value) {
-    this._result = value || [];
+    if (value) {
+      this._result = value.map((item) => ({time: item[0], value: item[1]}));
+    } else {
+      this._result = [];
+    }
     this.outputDestination$.next(this._result);
   }
   private _result;
@@ -88,34 +92,6 @@ export class ResultsComponent implements OnDestroy {
       this.outputSource$.next([]);
     }
   }
-
-  // prepareOutputDestination() {
-  //   const stop$ = new Subject();
-  //   const scheduler = new VirtualTimeScheduler(undefined, 100);
-  //
-  //   this.destination(scheduler)
-  //     .pipe(observeOn(scheduler))
-  //     .pipe(timestamp(scheduler))
-  //     .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
-  //     .pipe(takeUntil(stop$))
-  //     .pipe(reduce((a: any, b: any) => {
-  //       return a.concat(b);
-  //     }, []))
-  //     .pipe(map((list: any[]) => {
-  //       return list.map((item) => {
-  //         if (typeof item.value === 'boolean' ) {
-  //           item.value = item.value ? 'T' : 'F';
-  //         }
-  //         return item;
-  //       });
-  //     }))
-  //     .subscribe((list) => {
-  //       this.outputDestination$.next(list);
-  //     });
-  //
-  //   scheduler.flush();
-  //   stop$.next();
-  // }
 
   ngOnDestroy() {
     this.compareSubscription.unsubscribe();

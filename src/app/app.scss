@@ -4,6 +4,7 @@
   width: 100%;
   height: 100vh;
   background-color: #303030;
+  color: #fff;
 
   mat-toolbar {
     flex: 0 0 auto;
@@ -11,5 +12,7 @@
 
   .content {
     flex: 1;
+  //  padding: 16px;
+  //  overflow: auto;
   }
 }

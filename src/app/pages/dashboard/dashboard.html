@@ -1,3 +1,8 @@
-<div class="puzzles-container">
-  <mat-card [routerLink]="['/puzzle', puzzle.code]" *ngFor="let puzzle of puzzles">{{puzzle.title}}</mat-card>
+<div class="container">
+  <h2>Puzzles</h2>
+  <div class="puzzles-container">
+    <mat-card [routerLink]="['/puzzle', puzzle.code]" *ngFor="let puzzle of puzzles">
+      <mat-card-title>{{puzzle.title}}</mat-card-title>
+    </mat-card>
+  </div>
 </div>

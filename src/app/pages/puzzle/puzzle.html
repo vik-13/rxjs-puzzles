@@ -4,7 +4,7 @@
       <mat-card-title>Observables</mat-card-title>
       <mat-card-content>
         <div class="list"
-             #srcObservables="cdkDropList"
+             id="observable-list"
              cdkDropList
              [cdkDropListData]="puzzle?.observables"
              [cdkDropListConnectedTo]="destObservables"
@@ -20,8 +20,8 @@
     <mat-card class="controls">
       <mat-card-title>Operators</mat-card-title>
       <div class="list"
+           id="operator-list"
            cdkDropList
-           #srcOperators="cdkDropList"
            [cdkDropListData]="puzzle?.operatorsCollection"
            [cdkDropListConnectedTo]="destOperators"
            (cdkDropListDropped)="dropOperatorBack($event)">
@@ -55,7 +55,7 @@
              #destObservables="cdkDropList"
              cdkDropList
              [cdkDropListData]="tree.observable"
-             [cdkDropListConnectedTo]="srcObservables"
+             [cdkDropListConnectedTo]="'observable-list'"
              (cdkDropListDropped)="dropObservable($event)">
           <rxp-observable [inner]="true"
                           cdkDrag
@@ -67,7 +67,7 @@
         <div class="operators-container"
              #destOperators="cdkDropList"
              cdkDropList
-             [cdkDropListConnectedTo]="srcOperators"
+             [cdkDropListConnectedTo]="'operator-list'"
              [cdkDropListData]="tree.operators"
              (cdkDropListDropped)="dropOperator($event)">
 

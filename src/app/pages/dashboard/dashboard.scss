@@ -1,12 +1,21 @@
-.puzzles-container {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 32px;
+.container {
+  display: block;
+  padding: 16px;
   overflow: auto;
+  height: calc(100vh - 64px);
 
-  mat-card {
-    width: 100px;
-    height: 100px;
-    flex: 0 0 100px;
+  .puzzles-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 32px;
+    overflow: auto;
+
+    mat-card {
+      flex: 0 0 240px;
+      margin: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
   }
+
 }

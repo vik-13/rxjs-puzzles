@@ -101,6 +101,10 @@
         &:before {
           content: "Place observable here";
         }
+
+        &.cdk-drop-list-dragging:before {
+          content: "";
+        }
       }
 
       .operators-container {
