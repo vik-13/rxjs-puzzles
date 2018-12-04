@@ -1,4 +1,11 @@
 <ng-content></ng-content>
-<div class="mat-card error-message" *ngIf="!isValid()">
-  Argument is required.
-</div>
+<ng-container *ngIf="validity() as validityObject">
+  <div class="mat-card error-message" *ngIf="!validityObject.valid">
+    <span *ngIf="validityObject.required">
+      Argument is required.
+    </span>
+    <span *ngIf="validityObject.notCompatible">
+      Operator doesn't support this argument.
+    </span>
+  </div>
+</ng-container>

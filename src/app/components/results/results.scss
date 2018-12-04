@@ -2,10 +2,29 @@
 
 :host {
   display: block;
+  height: 128px;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 8px 0;
   background-color: #303030;
+
+  .current {
+    height: 64px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+  }
+
+  .sample {
+    height: 64px;
+    position: absolute;
+    top: 64px;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+  }
 }

@@ -1,11 +1,41 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { of, ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
 import { map, observeOn, reduce, switchMap, takeUntil, timestamp } from 'rxjs/operators';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { TYPE } from '../../puzzles/types';
 
 @Component({
   selector: 'rxp-results',
   templateUrl: 'results.html',
-  styleUrls: ['results.scss']
+  styleUrls: ['results.scss'],
+  animations: [
+    trigger('current', [
+      state('small', style({
+        top: '0'
+      })),
+      state('big', style({
+        top: '32px'
+      })),
+      transition('small <=> big', [
+        animate('.5s')
+      ])
+    ]),
+    trigger('sample', [
+      state('visible', style({
+        opacity: 1,
+        height: '64px',
+        top: '64px'
+      })),
+      state('hidden', style({
+        opacity: 0,
+        height: 0,
+        top: '128px'
+      })),
+      transition('visible <=> hidden', [
+        animate('.5s')
+      ])
+    ])
+  ]
 })
 export class ResultsComponent implements OnDestroy {
 
@@ -66,7 +96,11 @@ export class ResultsComponent implements OnDestroy {
     console.log(this.source);
     if (this.source.valid) {
       this.source.data.observable[0].func(scheduler)
-        .pipe(...this.source.data.operators.map((item) => item.func(item.values[0].value, scheduler)))
+        .pipe(...this.source.data.operators.map((item) => {
+          return item.func(item.values[0].type === TYPE.OBSERVABLE ?
+            item.values[0].func(scheduler) :
+            item.values[0].value, scheduler);
+        }))
         .pipe(observeOn(scheduler))
         .pipe(timestamp(scheduler))
         .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))

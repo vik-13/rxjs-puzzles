@@ -8,11 +8,18 @@
 
   mat-toolbar {
     flex: 0 0 auto;
+
+    nav {
+      display: flex;
+      width: 100%;
+
+      .flex {
+        flex: 1;
+      }
+    }
   }
 
   .content {
     flex: 1;
-  //  padding: 16px;
-  //  overflow: auto;
   }
 }

@@ -1,2 +1,6 @@
-<rxp-stream [stream$]="outputSource$"></rxp-stream>
-<rxp-stream [stream$]="outputDestination$"></rxp-stream>
+<div class="current" [@current]="isEqual ? 'big' : 'small'">
+  <rxp-stream [stream$]="outputSource$" [isEqual]="isEqual"></rxp-stream>
+</div>
+<div class="sample" [@sample]="isEqual ? 'hidden' : 'visible'">
+  <rxp-stream [stream$]="outputDestination$"></rxp-stream>
+</div>

@@ -12,13 +12,50 @@ import {
   takeUntil,
   takeWhile
 } from 'rxjs/operators';
-import { ARGUMENT_TYPE } from './argument-type';
+import { ARGUMENT_TYPE } from './arguments';
 import { OperatorFunction } from 'rxjs';
+import { TYPE } from './types';
 
 export enum OPERATOR {
   DEBOUNCE_TIME,
-  MAP
+  MAP,
+  FILTER,
+  AUDIT_TIME,
+  SKIP,
+  SAMPLE
 }
+
+// TODO: Too complex validation. Should be simplified.
+export const checkValidity = (operator) => {
+  const validityObject = {
+    valid: false,
+    required: false,
+    notCompatible: false
+  };
+
+  if (!operator.values.length && operator.argRequired) {
+    validityObject.required = true;
+    return validityObject;
+  } else if (!operator.values.length) {
+    validityObject.valid = true;
+    return validityObject;
+  }
+
+  if (operator.values[0].type === TYPE.OBSERVABLE) {
+    if (operator.argType === ARGUMENT_TYPE.OBSERVABLE) {
+      validityObject.valid = true;
+    } else {
+      validityObject.notCompatible = true;
+    }
+  } else {
+    if (typeof operator.values[0].value === operator.argType) {
+      validityObject.valid = true;
+    } else {
+      validityObject.notCompatible = true;
+    }
+  }
+  return validityObject;
+};
 
 export const OperatorsCollection = {
   [OPERATOR.DEBOUNCE_TIME]: {
@@ -32,7 +69,31 @@ export const OperatorsCollection = {
     func: (arg, scheduler) => map(arg),
     argType: ARGUMENT_TYPE.FUNCTION,
     argRequired: true
-  }
+  },
+  [OPERATOR.FILTER]: {
+    title: 'filter({{argument}})',
+    func: (arg, scheduler) => filter(arg),
+    argType: ARGUMENT_TYPE.FUNCTION,
+    argRequired: true
+  },
+  [OPERATOR.AUDIT_TIME]: {
+    title: 'auditTime({{argument}})',
+    func: (arg, scheduler) => auditTime(arg, scheduler),
+    argType: ARGUMENT_TYPE.NUMBER,
+    argRequired: true
+  },
+  [OPERATOR.SKIP]: {
+    title: 'skip({{argument}})',
+    func: (arg, scheduler) => skip(arg),
+    argType: ARGUMENT_TYPE.NUMBER,
+    argRequired: true
+  },
+  [OPERATOR.SAMPLE]: {
+    title: 'sample({{argument}})',
+    func: (arg, scheduler) => sample(arg),
+    argType: ARGUMENT_TYPE.OBSERVABLE,
+    argRequired: true
+  },
 };
 
 // export const Operators = {
@@ -47,7 +108,7 @@ export const OperatorsCollection = {
 //     argumentType: ARGUMENT_TYPE.FUNCTION
 //   },
 //   filter: {
-//     title: 'map({{argument}})',
+//     title: 'filter({{argument}})',
 //     operator: (arg, scheduler) => filter(arg),
 //     argumentType: ARGUMENT_TYPE.FUNCTION
 //   },

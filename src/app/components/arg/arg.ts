@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'rxp-arg',
   templateUrl: 'arg.html',
-  styleUrls: ['arg.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['arg.scss']
 })
 export class ArgComponent {
   @Input()

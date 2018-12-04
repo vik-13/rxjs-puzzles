@@ -1,6 +1,8 @@
 import { Observable, VirtualTimeScheduler } from 'rxjs';
 import { puzzle1 } from './collection/puzzle-1';
 import { puzzle2 } from './collection/puzzle-2';
+import { puzzle3 } from './collection/puzzle-3';
+import { puzzle4 } from './collection/puzzle-4';
 
 export interface ObservableType {
   title: string;
@@ -23,5 +25,7 @@ export interface Puzzle {
 
 export const puzzles: Puzzle[] = [
   puzzle1,
-  puzzle2
+  puzzle2,
+  puzzle3,
+  puzzle4
 ];

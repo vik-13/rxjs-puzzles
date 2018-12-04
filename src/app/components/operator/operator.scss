@@ -3,7 +3,7 @@
 :host {
   display: flex;
   margin: 8px 8px;
-  background-color: $color1;
+  background-color: $color2;
   white-space: nowrap;
 
   .error-message {
@@ -13,6 +13,18 @@
     padding: 7px;
     top: 9px;
     left: calc(100% + 16px);
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      height: 0;
+      width: 0;
+      margin-top: -5px;
+      border: 5px solid transparent;
+      border-right-color: $warn;
+    }
   }
 
   &.inner .error-message {

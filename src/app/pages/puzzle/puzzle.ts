@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Subject, timer } from 'rxjs';
 import { debounceTime, filter, map } from 'rxjs/operators';
 import { PuzzlesService } from '../../puzzles/puzzles.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { checkValidity } from '../../puzzles/operators';
 
 @Component({
   selector: 'rxp-puzzle',
@@ -119,15 +120,25 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
+  getAllIds() {
+    const idsList = ['src-arguments', 'observable-list', 'dest-observable'];
+
+    for (let i = 0; i < 32; i++) {
+      idsList.push(`dest-argument-${i}`);
+    }
+
+    return idsList;
+  }
+
   getIds(index = -1) {
     const idsList = [];
-    if (index !== -1) {
+    // if (index !== -1) {
       idsList.push('src-arguments');
-    }
+    // }
     for (let i = 0; i < 32; i++) {
-      if (index !== i) {
+      // if (index !== i) {
         idsList.push(`dest-argument-${i}`);
-      }
+      // }
     }
     return idsList;
   }
@@ -248,12 +259,9 @@ export class PuzzleComponent {
     } else {
       let isValid = true;
       this.tree.operators.forEach((operatorContainer) => {
-        if (operatorContainer.argRequired) {
-          if (!operatorContainer.values.length) {
-            isValid = false;
-          } else if (typeof operatorContainer.values[0].value !== operatorContainer.argType) {
-            isValid = false;
-          }
+        const validity = checkValidity(operatorContainer);
+        if (!validity.valid) {
+          isValid = false;
         }
       });
 
@@ -268,5 +276,13 @@ export class PuzzleComponent {
         });
       }
     }
+  }
+
+  enterPredicateSrcArguments(drag: CdkDrag, drop: CdkDropList) {
+    return drag.data.type !== 'observable';
+  }
+
+  enterPredicateSrcObservables(drag: CdkDrag, drop: CdkDropList) {
+    return drag.data.type !== 'argument';
   }
 }

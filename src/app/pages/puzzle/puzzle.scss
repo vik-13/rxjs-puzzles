@@ -16,8 +16,25 @@
 
       .list {
         display: flex;
+        position: relative;
         flex-direction: column;
         align-items: flex-start;
+        min-height: 64px;
+
+        &:before {
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          white-space: nowrap;
+          transform: translate(-50%, -50%);
+          color: $backgroundTextColor;
+          font-size: 22px;
+        }
+
+        &.no-data:not(.cdk-drop-list-dragging):before {
+          content: "No Data";
+        }
 
         &.arguments {
           >* {
@@ -62,7 +79,7 @@
         top: 50%;
         white-space: nowrap;
         transform: translate(-50%, -50%);
-        color: #ccc;
+        color: $backgroundTextColor;
         font-size: 32px;
       }
     }

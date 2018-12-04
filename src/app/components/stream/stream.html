@@ -8,6 +8,7 @@
   <div class="stream">
     <ng-container *ngIf="stream$ | async as stream">
       <rxp-bead
+        [@equality]="isEqual ? 'equal' : 'notEqual'"
         [element]="bead"
         *ngFor="let bead of stream">{{bead.value}}</rxp-bead>
     </ng-container>

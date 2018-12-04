@@ -1,4 +1,5 @@
 import { Component, HostBinding, Input } from '@angular/core';
+import { checkValidity } from '../../puzzles/operators';
 
 @Component({
   selector: 'rxp-operator',
@@ -18,16 +19,7 @@ export class OperatorComponent {
   }
   private _operator;
 
-  isValid() {
-    let isValid = true;
-    if (!this.operator) {
-      return isValid;
-    }
-    if (!this.operator.values.length) {
-      isValid = false;
-    } else if (typeof this.operator.values[0].value !== this.operator.argType) {
-      isValid = false;
-    }
-    return isValid;
+  validity() {
+    return this.operator && checkValidity(this.operator);
   }
 }
