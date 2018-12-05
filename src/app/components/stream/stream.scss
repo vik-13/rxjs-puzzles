@@ -1,72 +1,103 @@
 @import "~src/assets/scss/variables";
 
-.stream-wrapper {
-  height: 64px;
-  position: relative;
-
-  .stream-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: calc(100% - 128px);
+:host {
+  .stream-wrapper {
     height: 64px;
-    margin: 0 64px;
+    position: relative;
 
-    .line {
+    .stream-background {
       position: absolute;
-      margin: 0 -32px;
-      top: 50%;
+      top: 0;
       left: 0;
-      right: 0;
-      height: 1px;
-      background-color: #fff;
-    }
+      width: calc(100% - 128px);
+      height: 64px;
+      margin: 0 64px;
 
-    .tick {
-      display: flex;
-      justify-content: center;
-      position: absolute;
-      width: 1px;
-      height: 7px;
-      top: 50%;
-      margin-top: -3px;
-      background-color: #fff;
-      font-size: 11px;
-      color: #fff;
-
-      span {
-        position: relative;
-        top: 24px;
-        visibility: hidden;
+      .line {
+        position: absolute;
+        margin: 0 -32px;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-color: #fff;
       }
 
-      &.visible {
-        height: 13px;
-        margin-top: -6px;
+      .tick {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        width: 1px;
+        height: 7px;
+        top: 50%;
+        margin-top: -3px;
+        background-color: #fff;
+        font-size: 11px;
+        color: #fff;
 
         span {
-          visibility: visible;
+          position: relative;
+          top: 24px;
+          visibility: hidden;
         }
+
+        &.visible {
+          height: 13px;
+          margin-top: -6px;
+
+          span {
+            visibility: visible;
+          }
+        }
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        right: -32px;
+        top: 50%;
+        border: solid #fff;
+        border-width: 0 1px 1px 0;
+        display: inline-block;
+        padding: 3px;
+        margin-top: -3px;
+        transform: rotate(-45deg);
       }
     }
 
-    &:after {
-      content: "";
-      position: absolute;
-      right: -32px;
-      top: 50%;
-      border: solid #fff;
-      border-width: 0 1px 1px 0;
-      display: inline-block;
-      padding: 3px;
-      margin-top: -3px;
-      transform: rotate(-45deg);
+    .stream {
+      height: 100%;
+      position: relative;
+      margin: 0 64px;
     }
   }
 
-  .stream {
-    height: 100%;
-    position: relative;
-    margin: 0 64px;
+  &.preview {
+    .stream-wrapper {
+      .stream-background {
+        width: calc(100% - 32px);
+        margin: 0 16px;
+
+        .line {
+          margin: 0 -24px;
+        }
+
+        &:after {
+          right: -24px;
+        }
+      }
+
+      .stream {
+        margin: 0 16px;
+
+        .rxp-bead {
+          width: 16px;
+          height: 16px;
+          font-size: 9px;
+          line-height: 16px;
+          background-color: $color7;
+        }
+      }
+    }
   }
 }

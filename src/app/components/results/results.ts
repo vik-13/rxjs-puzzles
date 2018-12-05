@@ -54,18 +54,18 @@ export class ResultsComponent implements OnDestroy {
   private _source;
 
   @Input()
-  get result() {
-    return this._result;
+  get pattern() {
+    return this._pattern;
   }
-  set result(value) {
+  set pattern(value) {
     if (value) {
-      this._result = value.map((item) => ({time: item[0], value: item[1]}));
+      this._pattern = value.map((item) => ({time: item[0], value: item[1]}));
     } else {
-      this._result = [];
+      this._pattern = [];
     }
-    this.outputDestination$.next(this._result);
+    this.outputDestination$.next(this._pattern);
   }
-  private _result;
+  private _pattern;
 
   outputSource$ = new ReplaySubject(1);
   outputDestination$ = new ReplaySubject(1);
@@ -76,9 +76,9 @@ export class ResultsComponent implements OnDestroy {
   constructor() {
     this.compareSubscription = this.outputSource$.subscribe((sourceList: any[]) => {
       this.isEqual = true;
-      if (sourceList.length === this.result.length) {
+      if (sourceList.length === this.pattern.length) {
         sourceList.forEach((item, index) => {
-          if (item.value !== this.result[index].value || item.time !== this.result[index].time) {
+          if (item.value !== this.pattern[index].value || item.time !== this.pattern[index].time) {
             this.isEqual = false;
           }
         });
@@ -95,7 +95,7 @@ export class ResultsComponent implements OnDestroy {
     if (this.source.valid) {
       this.source.data.observable[0].func(scheduler)
         .pipe(...this.source.data.operators.map((item) => {
-          return item.func(item.values[0].type === TYPE.OBSERVABLE ?
+          return !item.values.length ? item.func() : item.func(item.values[0].type === TYPE.OBSERVABLE ?
             item.values[0].func(scheduler) :
             item.values[0].value, scheduler);
         }))

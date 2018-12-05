@@ -86,6 +86,7 @@
                         *ngFor="let operator of tree.operators; let index = index;">
             <span>{{operator.left}}</span>
             <span class="value-container"
+                  *ngIf="operator.argType"
                   [id]="'dest-argument-' + operator.id"
                   cdkDropList
                   [cdkDropListData]="operator.values"
@@ -115,6 +116,6 @@
       </div>
     </div>
 
-    <rxp-results [source]="source$" [result]="puzzle?.result"></rxp-results>
+    <rxp-results [source]="source$" [pattern]="puzzle?.pattern"></rxp-results>
   </div>
 </div>

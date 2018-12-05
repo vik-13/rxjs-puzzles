@@ -7,12 +7,11 @@
   .puzzles-container {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 32px;
     overflow: auto;
 
-    mat-card {
-      flex: 0 0 240px;
-      margin: 16px;
+    .puzzle {
+      flex: 0 0 33.33%;
+      padding: 16px;
       cursor: pointer;
       user-select: none;
     }

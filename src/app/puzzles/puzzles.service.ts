@@ -29,7 +29,7 @@ export class PuzzlesService {
           values: []
         };
       }),
-      result: [...puzzle.result.map((item) => ({...item}))]
+      pattern: [...puzzle.pattern.map((item) => ({...item}))]
     };
   }
 

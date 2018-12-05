@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, ViewChild } from '@angular/core';
 import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -37,6 +37,17 @@ export class StreamComponent {
     this._isEqual = coerceBooleanProperty(value);
   }
   private _isEqual: boolean;
+
+  @Input()
+  get preview() { return this._preview; }
+  set preview(value: any) {
+    this._preview = coerceBooleanProperty(value);
+    this.previewClass = this._preview;
+  }
+  private _preview = false;
+
+  @HostBinding('class.rxp-stream') rxpBeadClass = true;
+  @HostBinding('class.preview') previewClass = this.preview;
 
   ticks: {value: number, left: string, visible: boolean}[] = [];
 

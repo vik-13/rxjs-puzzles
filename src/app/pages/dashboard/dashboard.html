@@ -1,8 +1,12 @@
 <div class="container">
-  <h2>Puzzles</h2>
   <div class="puzzles-container">
-    <mat-card [routerLink]="['/puzzle', puzzle.code]" *ngFor="let puzzle of puzzles">
-      <mat-card-title>{{puzzle.title}}</mat-card-title>
-    </mat-card>
+    <div class="puzzle" *ngFor="let puzzle of puzzles">
+      <mat-card [routerLink]="['/puzzle', puzzle.code]">
+        <mat-card-title>#{{puzzle.code}}</mat-card-title>
+        <mat-card-content>
+          <rxp-stream [preview]="true" [stream$]="getStream(puzzle.pattern)"></rxp-stream>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>

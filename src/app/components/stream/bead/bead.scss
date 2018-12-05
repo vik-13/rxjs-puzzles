@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/variables";
+@import "~src/assets/scss/variables";
 
 :host {
   display: block;
@@ -9,7 +9,7 @@
   border-radius: 50%;
   transform: translate(-50%, -50%);
 
-  background-color: $primary;
+  background-color: $color7;
   opacity: 0.9;
 
   transition: opacity 1s;

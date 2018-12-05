@@ -95,6 +95,12 @@ export class PuzzleComponent {
     } else {
       if (event.previousContainer.data[event.previousIndex].type === TYPE.OBSERVABLE) {
         this.transferObservableToDest(event.container.data, event.previousIndex, event.previousContainer.data);
+
+        if (!this.tree.observable.length) {
+          for (let i = this.tree.operators.length - 1; i >= 0; i--) {
+            this.transferOperatorToSrc(i);
+          }
+        }
       } else {
         this.transferArgToDest(event.container.data, event.previousIndex, 0, event.previousContainer.data);
       }
@@ -119,12 +125,12 @@ export class PuzzleComponent {
     } else {
       let nextIndex = -1;
       this.tree.operators.forEach((operator, index) => {
-        if (!operator.values.length && nextIndex === -1) {
+        if (operator.argType && !operator.values.length && nextIndex === -1) {
           nextIndex = index;
         }
       });
 
-      if (nextIndex !== -1 || this.tree.operators.length) {
+      if (nextIndex !== -1 || (this.tree.operators.length && this.tree.operators[this.tree.operators.length - 1].argType)) {
         this.transferObservableToDest(this.tree.operators[nextIndex !== -1 ? nextIndex : this.tree.operators.length - 1].values, fromIndex);
       }
     }
@@ -143,12 +149,12 @@ export class PuzzleComponent {
     event.stopPropagation();
     let nextIndex = -1;
     this.tree.operators.forEach((operator, index) => {
-      if (!operator.values.length && nextIndex === -1) {
+      if (operator.argType && !operator.values.length && nextIndex === -1) {
         nextIndex = index;
       }
     });
 
-    if (nextIndex !== -1 || this.tree.operators.length) {
+    if (nextIndex !== -1 || (this.tree.operators.length && this.tree.operators[this.tree.operators.length - 1].argType)) {
       this.transferArgToDest(this.tree.operators[nextIndex !== -1 ? nextIndex : this.tree.operators.length - 1].values, fromIndex);
     }
 

@@ -3,6 +3,7 @@ import { DashboardComponent } from './dashboard';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { StreamModule } from '../../components/stream/stream.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule,
 
-    MatCardModule
+    MatCardModule,
+    StreamModule
   ],
   exports: [
     DashboardComponent
