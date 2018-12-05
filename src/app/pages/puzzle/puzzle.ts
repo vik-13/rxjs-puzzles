@@ -5,6 +5,7 @@ import { debounceTime, filter, map } from 'rxjs/operators';
 import { PuzzlesService } from '../../puzzles/puzzles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkValidity } from '../../puzzles/operators';
+import { TYPE } from '../../puzzles/types';
 
 @Component({
   selector: 'rxp-puzzle',
@@ -32,53 +33,42 @@ export class PuzzleComponent {
     });
   }
 
-  drop(event: CdkDragDrop<any>) {
+  dropObservableToSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
-  }
-
-  dropObservableBack(event: CdkDragDrop<any>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      this.transferObservable(event.currentIndex);
+      this.transferDestToSrcObservable(event.currentIndex);
     }
 
     this.publishStream();
   }
 
-  dropOperatorBack(event: CdkDragDrop<any>) {
+  dropOperatorToSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferOperator(event.previousContainer.data, event.previousIndex, event.currentIndex);
+      this.transferDestToSrcOperator(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
     this.publishStream();
   }
 
-  dropArgBack(event: CdkDragDrop<any>) {
+  dropArgToSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferArg(event.previousContainer.data, event.previousIndex, event.currentIndex);
+      this.transferDestToSrcArg(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
     this.publishStream();
   }
 
-  dropObservable(event: CdkDragDrop<any>) {
+  dropObservableToDest(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       if (event.container.data.length) {
-        this.transferObservable();
+        this.transferDestToSrcObservable(undefined, false);
       }
 
       transferArrayItem(event.previousContainer.data,
@@ -90,7 +80,7 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dropOperator(event: CdkDragDrop<any>) {
+  dropOperatorToDest(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -103,12 +93,12 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dropArg(event: CdkDragDrop<any>) {
+  dropArgToDest(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       if (event.container.data.length) {
-        this.transferArg(event.container.data, 0);
+        this.transferDestToSrcArg(event.container.data, 0);
       }
 
       transferArrayItem(event.previousContainer.data,
@@ -161,27 +151,29 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dblClickObservable(event) {
-    this.transferObservable();
+  dblClickDestObservable(event) {
+    this.transferDestToSrcObservable();
 
     this.publishStream();
   }
 
-  dblClickOperator(event, container, index) {
-    this.transferOperator(container, index);
+  dblClickDestOperator(event, container, index) {
+    this.transferDestToSrcOperator(container, index);
 
     this.publishStream();
   }
 
-  dblClickArg(event, container, index) {
+  dblClickDestArg(event, container, index) {
     event.stopPropagation();
-    this.transferArg(container, index);
+    this.transferDestToSrcArg(container, index);
     this.publishStream();
   }
 
-  transferObservable(nextIndex = this.puzzle.observables.length) {
-    for (let i = this.tree.operators.length - 1; i >= 0; i--) {
-      this.transferOperator(this.tree.operators, i);
+  transferDestToSrcObservable(nextIndex = this.puzzle.observables.length, transferOperators = true) {
+    if (transferOperators) {
+      for (let i = this.tree.operators.length - 1; i >= 0; i--) {
+        this.transferDestToSrcOperator(this.tree.operators, i);
+      }
     }
     transferArrayItem(this.tree.observable,
       this.puzzle.observables,
@@ -189,10 +181,17 @@ export class PuzzleComponent {
       nextIndex);
   }
 
-  transferOperator(container, index, nextIndex = this.puzzle.operatorsCollection.length) {
+  transferDestToSrcOperator(container, index, nextIndex = this.puzzle.operatorsCollection.length) {
     if (container[index].values.length) {
       for (let i = container[index].values.length - 1; i >= 0; i--) {
-        this.transferArg(container[index].values, i);
+        if (container[index].values[i].type === TYPE.OBSERVABLE) {
+          transferArrayItem(container[index].values,
+            this.puzzle.observables,
+            i,
+            this.puzzle.observables.length);
+        } else {
+          this.transferDestToSrcArg(container[index].values, i);
+        }
       }
     }
     transferArrayItem(container,
@@ -201,7 +200,7 @@ export class PuzzleComponent {
       nextIndex);
   }
 
-  transferArg(container, index, nextIndex = this.puzzle.args.length) {
+  transferDestToSrcArg(container, index, nextIndex = this.puzzle.args.length) {
     transferArrayItem(container,
       this.puzzle.args,
       index,
@@ -210,7 +209,7 @@ export class PuzzleComponent {
 
   transferSrcToDestObservable(currentIndex) {
     if (this.tree.observable.length) {
-      this.transferObservable(this.puzzle.observables.length);
+      this.transferDestToSrcObservable(this.puzzle.observables.length, false);
     }
 
     transferArrayItem(this.puzzle.observables,
@@ -243,7 +242,7 @@ export class PuzzleComponent {
         0);
     } else if (this.tree.operators.length) {
       nextIndex = this.tree.operators.length - 1;
-      this.transferArg(this.tree.operators[nextIndex].values, 0);
+      this.transferDestToSrcArg(this.tree.operators[nextIndex].values, 0);
       transferArrayItem(this.puzzle.args,
         this.tree.operators[nextIndex].values,
         currentIndex,
@@ -279,10 +278,10 @@ export class PuzzleComponent {
   }
 
   enterPredicateSrcArguments(drag: CdkDrag, drop: CdkDropList) {
-    return drag.data.type !== 'observable';
+    return drag.data.type !== TYPE.OBSERVABLE;
   }
 
   enterPredicateSrcObservables(drag: CdkDrag, drop: CdkDropList) {
-    return drag.data.type !== 'argument';
+    return drag.data.type !== TYPE.ARGUMENT;
   }
 }
