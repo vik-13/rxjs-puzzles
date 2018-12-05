@@ -33,31 +33,37 @@ export class PuzzleComponent {
     });
   }
 
-  dropObservableToSrc(event: CdkDragDrop<any>) {
+  dropToObservablesSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferDestToSrcObservable(event.currentIndex);
+      this.transferObservableToSrc(this.tree.observable, event.previousIndex, event.currentIndex);
+    }
+
+    if (!this.tree.observable.length) {
+      for (let i = this.tree.operators.length - 1; i >= 0; i--) {
+        this.transferOperatorToSrc(i);
+      }
     }
 
     this.publishStream();
   }
 
-  dropOperatorToSrc(event: CdkDragDrop<any>) {
+  dropToOperatorsSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferDestToSrcOperator(event.previousContainer.data, event.previousIndex, event.currentIndex);
+      this.transferOperatorToSrc(event.previousIndex, event.currentIndex);
     }
 
     this.publishStream();
   }
 
-  dropArgToSrc(event: CdkDragDrop<any>) {
+  dropToArgsSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferDestToSrcArg(event.previousContainer.data, event.previousIndex, event.currentIndex);
+      this.transferArgToSrc(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
     this.publishStream();
@@ -67,14 +73,7 @@ export class PuzzleComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      if (event.container.data.length) {
-        this.transferDestToSrcObservable(undefined, false);
-      }
-
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        0);
+      this.transferObservableToDest(event.container.data, event.previousIndex, event.previousContainer.data);
     }
 
     this.publishStream();
@@ -84,10 +83,7 @@ export class PuzzleComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      this.transferOperatorToDest(event.previousIndex, event.currentIndex);
     }
 
     this.publishStream();
@@ -97,14 +93,11 @@ export class PuzzleComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      if (event.container.data.length) {
-        this.transferDestToSrcArg(event.container.data, 0);
+      if (event.previousContainer.data[event.previousIndex].type === TYPE.OBSERVABLE) {
+        this.transferObservableToDest(event.container.data, event.previousIndex, event.previousContainer.data);
+      } else {
+        this.transferArgToDest(event.container.data, event.previousIndex, 0, event.previousContainer.data);
       }
-
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        0);
     }
 
     this.publishStream();
@@ -120,114 +113,34 @@ export class PuzzleComponent {
     return idsList;
   }
 
-  getIds(index = -1) {
-    const idsList = [];
-    // if (index !== -1) {
-      idsList.push('src-arguments');
-    // }
-    for (let i = 0; i < 32; i++) {
-      // if (index !== i) {
-        idsList.push(`dest-argument-${i}`);
-      // }
-    }
-    return idsList;
-  }
-
-  dblClickSrcObservables(event, index) {
-    this.transferSrcToDestObservable(index);
-
-    this.publishStream();
-  }
-
-  dblClickSrcOperators(event, index) {
-    this.transferSrcToDestOperator(index);
-
-    this.publishStream();
-  }
-
-  dblClickSrcArgs(event, index) {
-    event.stopPropagation();
-    this.transferSrcToDestArg(index);
-    this.publishStream();
-  }
-
-  dblClickDestObservable(event) {
-    this.transferDestToSrcObservable();
-
-    this.publishStream();
-  }
-
-  dblClickDestOperator(event, container, index) {
-    this.transferDestToSrcOperator(container, index);
-
-    this.publishStream();
-  }
-
-  dblClickDestArg(event, container, index) {
-    event.stopPropagation();
-    this.transferDestToSrcArg(container, index);
-    this.publishStream();
-  }
-
-  transferDestToSrcObservable(nextIndex = this.puzzle.observables.length, transferOperators = true) {
-    if (transferOperators) {
-      for (let i = this.tree.operators.length - 1; i >= 0; i--) {
-        this.transferDestToSrcOperator(this.tree.operators, i);
-      }
-    }
-    transferArrayItem(this.tree.observable,
-      this.puzzle.observables,
-      0,
-      nextIndex);
-  }
-
-  transferDestToSrcOperator(container, index, nextIndex = this.puzzle.operatorsCollection.length) {
-    if (container[index].values.length) {
-      for (let i = container[index].values.length - 1; i >= 0; i--) {
-        if (container[index].values[i].type === TYPE.OBSERVABLE) {
-          transferArrayItem(container[index].values,
-            this.puzzle.observables,
-            i,
-            this.puzzle.observables.length);
-        } else {
-          this.transferDestToSrcArg(container[index].values, i);
+  dblClickObservablesSrc(event, fromIndex) {
+    if (!this.tree.observable.length || !this.tree.operators.length) {
+      this.transferObservableToDest(this.tree.observable, fromIndex);
+    } else {
+      let nextIndex = -1;
+      this.tree.operators.forEach((operator, index) => {
+        if (!operator.values.length && nextIndex === -1) {
+          nextIndex = index;
         }
+      });
+
+      if (nextIndex !== -1 || this.tree.operators.length) {
+        this.transferObservableToDest(this.tree.operators[nextIndex !== -1 ? nextIndex : this.tree.operators.length - 1].values, fromIndex);
       }
     }
-    transferArrayItem(container,
-      this.puzzle.operatorsCollection,
-      index,
-      nextIndex);
+
+    this.publishStream();
   }
 
-  transferDestToSrcArg(container, index, nextIndex = this.puzzle.args.length) {
-    transferArrayItem(container,
-      this.puzzle.args,
-      index,
-      nextIndex);
+  dblClickOperatorsSrc(event, index) {
+    event.stopPropagation();
+    this.transferOperatorToDest(index);
+
+    this.publishStream();
   }
 
-  transferSrcToDestObservable(currentIndex) {
-    if (this.tree.observable.length) {
-      this.transferDestToSrcObservable(this.puzzle.observables.length, false);
-    }
-
-    transferArrayItem(this.puzzle.observables,
-      this.tree.observable,
-      currentIndex,
-      0);
-  }
-
-  transferSrcToDestOperator(currentIndex) {
-    if (this.tree.observable.length) {
-      transferArrayItem(this.puzzle.operatorsCollection,
-        this.tree.operators,
-        currentIndex,
-        this.tree.operators.length);
-    }
-  }
-
-  transferSrcToDestArg(currentIndex) {
+  dblClickArgsSrc(event, fromIndex) {
+    event.stopPropagation();
     let nextIndex = -1;
     this.tree.operators.forEach((operator, index) => {
       if (!operator.values.length && nextIndex === -1) {
@@ -235,19 +148,107 @@ export class PuzzleComponent {
       }
     });
 
-    if (nextIndex !== -1) {
-      transferArrayItem(this.puzzle.args,
-        this.tree.operators[nextIndex].values,
-        currentIndex,
-        0);
-    } else if (this.tree.operators.length) {
-      nextIndex = this.tree.operators.length - 1;
-      this.transferDestToSrcArg(this.tree.operators[nextIndex].values, 0);
-      transferArrayItem(this.puzzle.args,
-        this.tree.operators[nextIndex].values,
-        currentIndex,
-        0);
+    if (nextIndex !== -1 || this.tree.operators.length) {
+      this.transferArgToDest(this.tree.operators[nextIndex !== -1 ? nextIndex : this.tree.operators.length - 1].values, fromIndex);
     }
+
+    this.publishStream();
+  }
+
+  dblClickObservableDest(event, fromContainer, fromIndex) {
+    event.stopPropagation();
+    this.transferObservableToSrc(fromContainer, fromIndex);
+
+    if (!this.tree.observable.length) {
+      for (let i = this.tree.operators.length - 1; i >= 0; i--) {
+        this.transferOperatorToSrc(i);
+      }
+    }
+
+    this.publishStream();
+  }
+
+  dblClickDestOperator(event, container, fromIndex) {
+    this.transferOperatorToSrc(fromIndex);
+
+    this.publishStream();
+  }
+
+  dblClickDestArg(event, fromContainer, fromIndex) {
+    event.stopPropagation();
+    this.transferArgToSrc(fromContainer, fromIndex);
+
+    this.publishStream();
+  }
+
+  transferObservableToDest(toContainer, fromIndex, fromContainer = this.puzzle.observables) {
+    if (toContainer.length) {
+      for (let i = toContainer.length - 1; i >= 0; i--) {
+        if (toContainer[i].type === TYPE.OBSERVABLE) {
+          this.transferObservableToSrc(toContainer, i);
+        } else {
+          this.transferArgToSrc(toContainer, i);
+        }
+      }
+    }
+    transferArrayItem(fromContainer,
+      toContainer,
+      fromIndex,
+      0);
+  }
+
+  transferOperatorToDest(fromIndex, toIndex = this.tree.operators.length) {
+    transferArrayItem(this.puzzle.operatorsCollection,
+      this.tree.operators,
+      fromIndex,
+      toIndex);
+  }
+
+  transferArgToDest(toContainer, fromIndex, toIndex = 0, fromContainer = this.puzzle.args) {
+    if (toContainer.length) {
+      for (let i = toContainer.length - 1; i >= 0; i--) {
+        if (toContainer[i].type === TYPE.OBSERVABLE) {
+          this.transferObservableToSrc(toContainer, i);
+        } else {
+          this.transferArgToSrc(toContainer, i);
+        }
+      }
+    }
+
+    transferArrayItem(fromContainer,
+      toContainer,
+      fromIndex,
+      toIndex);
+  }
+
+  transferObservableToSrc(fromContainer, fromIndex, toIndex = this.puzzle.observables.length) {
+    transferArrayItem(fromContainer,
+      this.puzzle.observables,
+      fromIndex,
+      toIndex);
+  }
+
+  transferOperatorToSrc(fromIndex, toIndex = this.puzzle.operatorsCollection.length) {
+    if (this.tree.operators[fromIndex].values.length) {
+      for (let i = this.tree.operators[fromIndex].values.length - 1; i >= 0; i--) {
+        if (this.tree.operators[fromIndex].values[i].type === TYPE.OBSERVABLE) {
+          this.transferObservableToSrc(this.tree.operators[fromIndex].values, i);
+        } else {
+          this.transferArgToSrc(this.tree.operators[fromIndex].values, i);
+        }
+      }
+    }
+    transferArrayItem(this.tree.operators,
+      this.puzzle.operatorsCollection,
+      fromIndex,
+      toIndex);
+  }
+
+  transferArgToSrc(fromContainer, fromIndex, toIndex = this.puzzle.args.length) {
+    transferArrayItem(fromContainer,
+      this.puzzle.args,
+      fromIndex,
+      toIndex);
   }
 
   publishStream() {
@@ -277,11 +278,11 @@ export class PuzzleComponent {
     }
   }
 
-  enterPredicateSrcArguments(drag: CdkDrag, drop: CdkDropList) {
+  enterPredicateOnlyArguments(drag: CdkDrag, drop: CdkDropList) {
     return drag.data.type !== TYPE.OBSERVABLE;
   }
 
-  enterPredicateSrcObservables(drag: CdkDrag, drop: CdkDropList) {
+  enterPredicateOnlyObservables(drag: CdkDrag, drop: CdkDropList) {
     return drag.data.type !== TYPE.ARGUMENT;
   }
 }

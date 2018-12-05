@@ -85,7 +85,6 @@ export class ResultsComponent implements OnDestroy {
       } else {
         this.isEqual = false;
       }
-      console.log(this.isEqual);
     });
   }
 
@@ -93,7 +92,6 @@ export class ResultsComponent implements OnDestroy {
     const stop$ = new Subject();
     const scheduler = new VirtualTimeScheduler(undefined, 100);
 
-    console.log(this.source);
     if (this.source.valid) {
       this.source.data.observable[0].func(scheduler)
         .pipe(...this.source.data.operators.map((item) => {

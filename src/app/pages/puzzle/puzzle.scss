@@ -72,6 +72,12 @@
         display: inline-block;
       }
 
+      .cdk-drag-placeholder {
+        display: inline-block;
+        padding: 16px;
+        margin: 4px 8px;
+      }
+
       &:before {
         content: "";
         position: absolute;
