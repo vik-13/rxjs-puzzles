@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { of, ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
 import { map, observeOn, reduce, switchMap, takeUntil, timestamp } from 'rxjs/operators';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -67,6 +67,8 @@ export class ResultsComponent implements OnDestroy {
   }
   private _pattern;
 
+  @Output() equality: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   outputSource$ = new ReplaySubject(1);
   outputDestination$ = new ReplaySubject(1);
   isEqual = false;
@@ -75,15 +77,19 @@ export class ResultsComponent implements OnDestroy {
 
   constructor() {
     this.compareSubscription = this.outputSource$.subscribe((sourceList: any[]) => {
-      this.isEqual = true;
+      let isEqual = true;
       if (sourceList.length === this.pattern.length) {
         sourceList.forEach((item, index) => {
           if (item.value !== this.pattern[index].value || item.time !== this.pattern[index].time) {
-            this.isEqual = false;
+            isEqual = false;
           }
         });
       } else {
-        this.isEqual = false;
+        isEqual = false;
+      }
+      if (this.isEqual !== isEqual) {
+        this.isEqual = isEqual;
+        this.equality.emit(this.isEqual);
       }
     });
   }

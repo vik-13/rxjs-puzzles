@@ -43,7 +43,7 @@ export enum OPERATOR {
   MERGE
 }
 
-// TODO: Too complex validation. Should be simplified.
+// TODO: Too complex implementation. Should be simplified.
 export const checkValidity = (operator) => {
   const validityObject = {
     valid: false,

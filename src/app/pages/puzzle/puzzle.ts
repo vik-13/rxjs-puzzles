@@ -6,6 +6,8 @@ import { PuzzlesService } from '../../puzzles/puzzles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkValidity } from '../../puzzles/operators';
 import { TYPE } from '../../puzzles/types';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { SuccessDialogComponent } from './success-dialog/success-dialog';
 
 @Component({
   selector: 'rxp-puzzle',
@@ -21,9 +23,11 @@ export class PuzzleComponent {
   puzzle;
 
   source$ = new Subject();
+  dialogInstance: MatDialogRef<SuccessDialogComponent>;
 
-  constructor(private puzzlesService: PuzzlesService, private router: Router,
-              private route: ActivatedRoute) {
+  constructor(private puzzlesService: PuzzlesService,
+              private router: Router,
+              private route: ActivatedRoute, private dialog: MatDialog) {
     route.params.subscribe((params) => {
       if (params.id) {
         this.puzzle = puzzlesService.getPreparedByCode(params.id);
@@ -290,5 +294,18 @@ export class PuzzleComponent {
 
   enterPredicateOnlyObservables(drag: CdkDrag, drop: CdkDropList) {
     return drag.data.type !== TYPE.ARGUMENT;
+  }
+
+  equality(isEqual) {
+    if (isEqual) {
+      // TODO: Cancel previous setTimeout to prevent opening dialog in case if user has changed stream already.
+      setTimeout(() => {
+        this.dialogInstance = this.dialog.open(SuccessDialogComponent);
+      }, 1000);
+    } else {
+      this.dialogInstance.close();
+      this.dialogInstance = null;
+    }
+    console.log(isEqual);
   }
 }

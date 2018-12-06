@@ -116,6 +116,6 @@
       </div>
     </div>
 
-    <rxp-results [source]="source$" [pattern]="puzzle?.pattern"></rxp-results>
+    <rxp-results [source]="source$" [pattern]="puzzle?.pattern" (equality)="equality($event)"></rxp-results>
   </div>
 </div>
