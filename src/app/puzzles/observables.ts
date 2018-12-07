@@ -1,8 +1,8 @@
 import { Observable, VirtualTimeScheduler } from 'rxjs';
-import { TYPE } from './types';
+import { ElementType } from './element-type';
 
 export class Obs {
-  type: TYPE = TYPE.OBSERVABLE;
+  type: ElementType = ElementType.OBSERVABLE;
 
   constructor(public func: (scheduler: VirtualTimeScheduler) => Observable<number|boolean>, public title: string) {}
 }

@@ -5,7 +5,7 @@ import { debounceTime, filter, map } from 'rxjs/operators';
 import { PuzzlesService } from '../../puzzles/puzzles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkValidity } from '../../puzzles/operators';
-import { TYPE } from '../../puzzles/types';
+import { ElementType } from '../../puzzles/element-type';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { SuccessDialogComponent } from './success-dialog/success-dialog';
 
@@ -97,7 +97,7 @@ export class PuzzleComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      if (event.previousContainer.data[event.previousIndex].type === TYPE.OBSERVABLE) {
+      if (event.previousContainer.data[event.previousIndex].type === ElementType.OBSERVABLE) {
         this.transferObservableToDest(event.container.data, event.previousIndex, event.previousContainer.data);
 
         if (!this.tree.observable.length) {
@@ -194,7 +194,7 @@ export class PuzzleComponent {
   transferObservableToDest(toContainer, fromIndex, fromContainer = this.puzzle.observables) {
     if (toContainer.length) {
       for (let i = toContainer.length - 1; i >= 0; i--) {
-        if (toContainer[i].type === TYPE.OBSERVABLE) {
+        if (toContainer[i].type === ElementType.OBSERVABLE) {
           this.transferObservableToSrc(toContainer, i);
         } else {
           this.transferArgToSrc(toContainer, i);
@@ -217,7 +217,7 @@ export class PuzzleComponent {
   transferArgToDest(toContainer, fromIndex, toIndex = 0, fromContainer = this.puzzle.args) {
     if (toContainer.length) {
       for (let i = toContainer.length - 1; i >= 0; i--) {
-        if (toContainer[i].type === TYPE.OBSERVABLE) {
+        if (toContainer[i].type === ElementType.OBSERVABLE) {
           this.transferObservableToSrc(toContainer, i);
         } else {
           this.transferArgToSrc(toContainer, i);
@@ -241,7 +241,7 @@ export class PuzzleComponent {
   transferOperatorToSrc(fromIndex, toIndex = this.puzzle.operatorsCollection.length) {
     if (this.tree.operators[fromIndex].values.length) {
       for (let i = this.tree.operators[fromIndex].values.length - 1; i >= 0; i--) {
-        if (this.tree.operators[fromIndex].values[i].type === TYPE.OBSERVABLE) {
+        if (this.tree.operators[fromIndex].values[i].type === ElementType.OBSERVABLE) {
           this.transferObservableToSrc(this.tree.operators[fromIndex].values, i);
         } else {
           this.transferArgToSrc(this.tree.operators[fromIndex].values, i);
@@ -289,11 +289,11 @@ export class PuzzleComponent {
   }
 
   enterPredicateOnlyArguments(drag: CdkDrag, drop: CdkDropList) {
-    return drag.data.type !== TYPE.OBSERVABLE;
+    return drag.data.type !== ElementType.OBSERVABLE;
   }
 
   enterPredicateOnlyObservables(drag: CdkDrag, drop: CdkDropList) {
-    return drag.data.type !== TYPE.ARGUMENT;
+    return drag.data.type !== ElementType.ARGUMENT;
   }
 
   equality(isEqual) {

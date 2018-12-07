@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { of, ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
 import { map, observeOn, reduce, switchMap, takeUntil, timestamp } from 'rxjs/operators';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { TYPE } from '../../puzzles/types';
+import { ElementType } from '../../puzzles/element-type';
 
 @Component({
   selector: 'rxp-results',
@@ -101,7 +101,7 @@ export class ResultsComponent implements OnDestroy {
     if (this.source.valid) {
       this.source.data.observable[0].func(scheduler)
         .pipe(...this.source.data.operators.map((item) => {
-          return !item.values.length ? item.func() : item.func(item.values[0].type === TYPE.OBSERVABLE ?
+          return !item.values.length ? item.func() : item.func(item.values[0].type === ElementType.OBSERVABLE ?
             item.values[0].func(scheduler) :
             item.values[0].value, scheduler);
         }))
