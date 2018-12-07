@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [class.open-menu]="controlsIsOpen">
   <div class="controls-container">
     <mat-card class="controls">
       <mat-card-content>
@@ -11,8 +11,9 @@
              [cdkDropListEnterPredicate]="enterPredicateOnlyObservables"
              (cdkDropListDropped)="dropToObservablesSrc($event)">
           <rxp-observable cdkDrag
+                          (cdkDragStarted)="startDragging()"
                           [cdkDragData]="observable"
-                          (dblclick)="dblClickObservablesSrc($event, index);"
+                          (click)="dblClickObservablesSrc($event, index);"
                           *ngFor="let observable of puzzle?.observables; let index = index;">
             {{observable.title}}
           </rxp-observable>
@@ -28,8 +29,9 @@
            [cdkDropListConnectedTo]="destOperators"
            (cdkDropListDropped)="dropToOperatorsSrc($event)">
         <rxp-operator cdkDrag
+                      (cdkDragStarted)="startDragging()"
                       [cdkDragData]="operator"
-                      (dblclick)="dblClickOperatorsSrc($event, index);"
+                      (click)="dblClickOperatorsSrc($event, index);"
                       *ngFor="let operator of puzzle?.operatorsCollection; let index = index;">
           {{operator.title}}
         </rxp-operator>
@@ -45,14 +47,19 @@
            [cdkDropListEnterPredicate]="enterPredicateOnlyArguments"
            (cdkDropListDropped)="dropToArgsSrc($event)">
         <rxp-arg cdkDrag
+                 (cdkDragStarted)="startDragging()"
                  [cdkDragData]="arg"
-                 (dblclick)="dblClickArgsSrc($event, index);"
+                 (click)="dblClickArgsSrc($event, index);"
                  *ngFor="let arg of puzzle?.args; let index = index;">
           {{arg.title}}
         </rxp-arg>
       </div>
     </mat-card>
   </div>
+  <div class="device-control" (click)="openControls($event)">
+    <span>Click here!</span>
+  </div>
+  <div class="backdrop-shadow" (click)="closeControls($event)"></div>
   <div class="main-container">
     <div class="main-stream-container">
       <div class="stream" [class.no-stream]="!tree.observable.length">
@@ -66,7 +73,7 @@
              (cdkDropListDropped)="dropObservableToDest($event)">
           <rxp-observable cdkDrag
                           [cdkDragData]="observable"
-                          (dblclick)="dblClickObservableDest($event, tree.observable, index);"
+                          (click)="dblClickObservableDest($event, tree.observable, index);"
                           *ngFor="let observable of tree.observable; let index = index;">
             {{observable.title}}
           </rxp-observable>
@@ -82,7 +89,7 @@
                         [operator]="operator"
                         cdkDrag
                         [cdkDragData]="operator"
-                        (dblclick)="dblClickDestOperator($event, tree.operators, index);"
+                        (click)="dblClickDestOperator($event, tree.operators, index);"
                         *ngFor="let operator of tree.operators; let index = index;">
             <span>{{operator.left}}</span>
             <span class="value-container"
@@ -97,14 +104,14 @@
                 <rxp-observable [inner]="true"
                                 cdkDrag
                                 [cdkDragData]="arg"
-                                (dblclick)="dblClickObservableDest($event, operator.values, index);"
+                                (click)="dblClickObservableDest($event, operator.values, index);"
                                 *ngIf="arg.type === 'observable'">
                   {{arg.title}}
                 </rxp-observable>
                 <rxp-arg [inner]="true"
                          cdkDrag
                          [cdkDragData]="arg"
-                         (dblclick)="dblClickDestArg($event, operator.values, index);"
+                         (click)="dblClickDestArg($event, operator.values, index);"
                          *ngIf="arg.type === 'argument'">
                 {{arg.title}}
               </rxp-arg>
@@ -115,7 +122,6 @@
         </div>
       </div>
     </div>
-
-    <rxp-results [source]="source$" [pattern]="puzzle?.pattern" (equality)="equality($event)"></rxp-results>
   </div>
+  <rxp-results [source]="source$" [pattern]="puzzle?.pattern" (equality)="equality($event)"></rxp-results>
 </div>

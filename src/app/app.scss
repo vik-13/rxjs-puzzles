@@ -7,7 +7,9 @@
   color: #fff;
 
   mat-toolbar {
+    padding-left: 0;
     flex: 0 0 auto;
+    transition: padding-left .3s cubic-bezier(0, 0, 0.2, 1);
 
     nav {
       display: flex;
@@ -16,6 +18,10 @@
       .flex {
         flex: 1;
       }
+    }
+
+    @media (max-width: 960px) {
+      padding-left: 64px;
     }
   }
 

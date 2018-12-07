@@ -1,15 +1,21 @@
 @import "~src/assets/scss/variables";
 
 .container {
-  display: flex;
+  position: relative;
   height: calc(100vh - 64px);
 
   .controls-container {
-    flex: 0 0 25%;
-    min-width: 300px;
-    height: 100%;
-    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 275px;
+    height: calc(100% - 128px);
     padding: 8px 16px;
+    margin-bottom: 128px;
+    z-index: 10;
+    overflow: auto;
+    background-color: #303030;
+    transition: left .3s cubic-bezier(0, 0, 0.2, 1);
 
     .controls {
       margin: 8px 0;
@@ -45,104 +51,168 @@
         }
       }
     }
+
+    @media (max-width: 960px) {
+      left: -275px;
+    }
+  }
+
+  .device-control {
+    display: flex;
+    position: absolute;
+    z-index: 5;
+    width: 64px;
+    height: calc(100% - 128px);
+    align-items: center;
+    justify-content: center;
+    left: -64px;
+    transition: margin-left .3s cubic-bezier(0, 0, 0.2, 1);
+
+    @media (max-width: 960px) {
+      left: 0;
+    }
+
+    span {
+      display: block;
+      transform: rotate(-90deg);
+      white-space: nowrap;
+    }
+  }
+
+  .backdrop-shadow {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    z-index: 7;
+
+    background-color: #303030;
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(0, 0, 0.2, 1);
   }
 
   .main-container {
     position: relative;
-    flex: 1;
+    margin-left: 275px;
     height: 100%;
     background-color: #202020;
+    transition: margin-left .3s cubic-bezier(0, 0, 0.2, 1);
+
+    @media (max-width: 960px) {
+      margin-left: 64px;
+    }
+
+    .main-stream-container {
+      height: 100%;
+      overflow: auto;
+      padding: 32px 64px 176px;
+      transition: padding .3s cubic-bezier(0, 0, 0.2, 1);
+
+      @media (max-width: 960px) {
+        padding: 16px 16px 160px;
+      }
+
+      .stream {
+        .observable-container {
+          position: relative;
+          min-height: 40px;
+          min-width: 100px;
+
+          >* {
+            display: inline-block;
+          }
+
+          .cdk-drag-placeholder {
+            display: inline-block;
+            padding: 16px;
+            margin: 4px 8px;
+          }
+
+          &:before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            white-space: nowrap;
+            transform: translate(-50%, -50%);
+            color: $backgroundTextColor;
+            font-size: 32px;
+          }
+        }
+
+        .operators-container {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          position: relative;
+          min-height: 40px;
+          min-width: 100px;
+
+          >* {
+            margin-left: 32px;
+          }
+        }
+
+        .value-container {
+          display: flex;
+          align-items: center;
+          min-width: 32px;
+          height: 51px;
+          margin: -16px 0;
+
+          >* {
+            display: inline-block;
+            padding: 10px;
+            margin: 0 8px;
+          }
+        }
+
+        &.no-stream {
+          height: 100%;
+
+          .observable-container {
+            height: 100%;
+
+            &:before {
+              content: "Place observable here";
+            }
+
+            &.cdk-drop-list-dragging:before {
+              content: "";
+            }
+          }
+
+          .operators-container {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  &.open-menu {
+    .controls-container {
+      left: 0;
+    }
+
+    .device-control {
+      left: -64px;
+    }
+
+    .backdrop-shadow {
+      display: block;
+      opacity: .4;
+    }
   }
 }
 
-.main-stream-container {
-  height: 100%;
-  overflow: auto;
-  padding: 32px 64px 176px;
-
-  .stream {
-    height: 100%;
-
-    .observable-container {
-      position: relative;
-      min-height: 40px;
-      min-width: 100px;
-
-      >* {
-        display: inline-block;
-      }
-
-      .cdk-drag-placeholder {
-        display: inline-block;
-        padding: 16px;
-        margin: 4px 8px;
-      }
-
-      &:before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        white-space: nowrap;
-        transform: translate(-50%, -50%);
-        color: $backgroundTextColor;
-        font-size: 32px;
-      }
-    }
-
-    .operators-container {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      position: relative;
-      min-height: 40px;
-      min-width: 100px;
-
-      >* {
-        margin-left: 32px;
-      }
-    }
-
-    .value-container {
-      display: flex;
-      align-items: center;
-      min-width: 32px;
-      height: 51px;
-      margin: -16px 0;
-
-      >* {
-        display: inline-block;
-        padding: 10px;
-        margin: 0 8px;
-      }
-    }
-
-    &.no-stream {
-      .observable-container {
-        height: 100%;
-
-        &:before {
-          content: "Place observable here";
-        }
-
-        &.cdk-drop-list-dragging:before {
-          content: "";
-        }
-      }
-
-      .operators-container {
-        display: none;
-      }
-    }
-  }
-}
-
-/* Animate items as they're being sorted. */
 .cdk-drop-list-dragging .cdk-drag {
   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-/* Animate an item that has been dropped. */
 .cdk-drag-animating {
   transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
 }

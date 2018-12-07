@@ -20,6 +20,8 @@ export class PuzzleComponent {
     operators: [],
   };
 
+  controlsIsOpen = false;
+
   puzzle;
 
   source$ = new Subject();
@@ -306,6 +308,17 @@ export class PuzzleComponent {
       this.dialogInstance.close();
       this.dialogInstance = null;
     }
-    console.log(isEqual);
+  }
+
+  openControls(event) {
+    this.controlsIsOpen = true;
+  }
+
+  closeControls(event) {
+    this.controlsIsOpen = false;
+  }
+
+  startDragging() {
+    this.controlsIsOpen = false;
   }
 }
