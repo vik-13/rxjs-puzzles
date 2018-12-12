@@ -1,27 +1,26 @@
 <div class="container" [class.open-menu]="controlsIsOpen">
   <div class="controls-container">
-    <mat-card class="controls">
-      <mat-card-content>
-        <div class="list"
-             [class.no-data]="!puzzle?.observables.length"
-             id="observable-list"
-             cdkDropList
-             [cdkDropListData]="puzzle?.observables"
-             [cdkDropListConnectedTo]="getAllIds()"
-             [cdkDropListEnterPredicate]="enterPredicateOnlyObservables"
-             (cdkDropListDropped)="dropToObservablesSrc($event)">
-          <rxp-observable cdkDrag
-                          (cdkDragStarted)="startDragging()"
-                          [cdkDragData]="observable"
-                          (click)="dblClickObservablesSrc($event, index);"
-                          *ngFor="let observable of puzzle?.observables; let index = index;">
-            {{observable.title}}
-          </rxp-observable>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="controls">
-      <div class="list"
+    <div class="controls">
+      <div class="list observables"
+           [class.no-data]="!puzzle?.observables.length"
+           id="observable-list"
+           cdkDropList
+           [cdkDropListData]="puzzle?.observables"
+           [cdkDropListConnectedTo]="getAllIds()"
+           [cdkDropListEnterPredicate]="enterPredicateOnlyObservables"
+           (cdkDropListDropped)="dropToObservablesSrc($event)">
+        <mat-card class="element element-observable"
+                  cdkDrag
+                  (cdkDragStarted)="startDragging()"
+                  [cdkDragData]="observable"
+                  (click)="clickObservablesSrc($event, index);"
+                  *ngFor="let observable of puzzle?.observables; let index = index;">
+          {{observable.title}}
+        </mat-card>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="list operators"
            [class.no-data]="!puzzle?.operatorsCollection.length"
            id="operator-list"
            cdkDropList
@@ -31,13 +30,13 @@
         <rxp-operator cdkDrag
                       (cdkDragStarted)="startDragging()"
                       [cdkDragData]="operator"
-                      (click)="dblClickOperatorsSrc($event, index);"
+                      (click)="clickOperatorsSrc($event, index);"
                       *ngFor="let operator of puzzle?.operatorsCollection; let index = index;">
           {{operator.title}}
         </rxp-operator>
       </div>
-    </mat-card>
-    <mat-card class="controls">
+    </div>
+    <div class="controls">
       <div class="list arguments"
            [class.no-data]="!puzzle?.args.length"
            id="src-arguments"
@@ -49,12 +48,12 @@
         <rxp-arg cdkDrag
                  (cdkDragStarted)="startDragging()"
                  [cdkDragData]="arg"
-                 (click)="dblClickArgsSrc($event, index);"
+                 (click)="clickArgsSrc($event, index);"
                  *ngFor="let arg of puzzle?.args; let index = index;">
           {{arg.title}}
         </rxp-arg>
       </div>
-    </mat-card>
+    </div>
   </div>
   <div class="device-control" (click)="openControls($event)">
     <span>Click here!</span>
@@ -68,15 +67,17 @@
              id="dest-observable"
              cdkDropList
              [cdkDropListData]="tree.observable"
+             [cdkDropListOrientation]="'horizontal'"
              [cdkDropListConnectedTo]="getAllIds()"
              [cdkDropListEnterPredicate]="enterPredicateOnlyObservables"
              (cdkDropListDropped)="dropObservableToDest($event)">
-          <rxp-observable cdkDrag
-                          [cdkDragData]="observable"
-                          (click)="dblClickObservableDest($event, tree.observable, index);"
-                          *ngFor="let observable of tree.observable; let index = index;">
+          <mat-card class="element element-observable"
+                    cdkDrag
+                    [cdkDragData]="observable"
+                    (click)="clickObservableDest($event, tree.observable, index);"
+                    *ngFor="let observable of tree.observable; let index = index;">
             {{observable.title}}
-          </rxp-observable>
+          </mat-card>
         </div>
         <div class="operators-container"
              #destOperators="cdkDropList"
@@ -84,15 +85,14 @@
              [cdkDropListConnectedTo]="'operator-list'"
              [cdkDropListData]="tree.operators"
              (cdkDropListDropped)="dropOperatorToDest($event)">
-
           <rxp-operator [inner]="true"
                         [operator]="operator"
                         cdkDrag
                         [cdkDragData]="operator"
-                        (click)="dblClickDestOperator($event, tree.operators, index);"
+                        (click)="clickDestOperator($event, tree.operators, index);"
                         *ngFor="let operator of tree.operators; let index = index;">
             <span>{{operator.left}}</span>
-            <span class="value-container"
+            <span class="arg-container"
                   *ngIf="operator.argType"
                   [id]="'dest-argument-' + operator.id"
                   cdkDropList
@@ -101,20 +101,20 @@
                   [cdkDropListConnectedTo]="getAllIds()"
                   (cdkDropListDropped)="dropArgToDest($event)">
               <ng-container *ngFor="let arg of operator.values; let index = index;">
-                <rxp-observable [inner]="true"
-                                cdkDrag
-                                [cdkDragData]="arg"
-                                (click)="dblClickObservableDest($event, operator.values, index);"
-                                *ngIf="arg.type === 'observable'">
+                <mat-card class="element element-observable small"
+                          cdkDrag
+                          [cdkDragData]="arg"
+                          (click)="clickObservableDest($event, operator.values, index);"
+                          *ngIf="arg.type === 'observable'">
                   {{arg.title}}
-                </rxp-observable>
-                <rxp-arg [inner]="true"
-                         cdkDrag
-                         [cdkDragData]="arg"
-                         (click)="dblClickDestArg($event, operator.values, index);"
-                         *ngIf="arg.type === 'argument'">
-                {{arg.title}}
-              </rxp-arg>
+                </mat-card>
+                <mat-card class="element element-arg small"
+                          cdkDrag
+                          [cdkDragData]="arg"
+                          (click)="clickDestArg($event, operator.values, index);"
+                          *ngIf="arg.type === 'argument'">
+                  {{arg.title}}
+                </mat-card>
               </ng-container>
             </span>
             <span>{{operator.right}}</span>

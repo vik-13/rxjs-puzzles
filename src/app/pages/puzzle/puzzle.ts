@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, Renderer2 } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Subject, timer } from 'rxjs';
 import { debounceTime, filter, map } from 'rxjs/operators';
@@ -17,22 +17,35 @@ import { SuccessDialogComponent } from './success-dialog/success-dialog';
 export class PuzzleComponent {
   tree = {
     observable: [],
-    operators: [],
+    operators: []
   };
 
   controlsIsOpen = false;
 
   puzzle;
+  nextCode;
 
   source$ = new Subject();
   dialogInstance: MatDialogRef<SuccessDialogComponent>;
 
   constructor(private puzzlesService: PuzzlesService,
               private router: Router,
-              private route: ActivatedRoute, private dialog: MatDialog) {
+              private route: ActivatedRoute,
+              private renderer: Renderer2,
+              private changeDetector: ChangeDetectorRef,
+              private dialog: MatDialog) {
     route.params.subscribe((params) => {
       if (params.id) {
+        this.tree = {
+          observable: [],
+          operators: []
+        };
         this.puzzle = puzzlesService.getPreparedByCode(params.id);
+        this.nextCode = puzzlesService.getNextByCode(params.id);
+        this.changeDetector.markForCheck();
+        this.source$.next({
+          valid: false
+        });
       } else {
         router.navigate(['/dashboard']).then();
       }
@@ -43,9 +56,10 @@ export class PuzzleComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferObservableToSrc(this.tree.observable, event.previousIndex, event.currentIndex);
+      this.transferObservableToSrc(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
+    // TODO: Only if you drag form Observable
     if (!this.tree.observable.length) {
       for (let i = this.tree.operators.length - 1; i >= 0; i--) {
         this.transferOperatorToSrc(i);
@@ -125,7 +139,7 @@ export class PuzzleComponent {
     return idsList;
   }
 
-  dblClickObservablesSrc(event, fromIndex) {
+  clickObservablesSrc(event, fromIndex) {
     if (!this.tree.observable.length || !this.tree.operators.length) {
       this.transferObservableToDest(this.tree.observable, fromIndex);
     } else {
@@ -144,14 +158,17 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dblClickOperatorsSrc(event, index) {
+  clickOperatorsSrc(event, index) {
     event.stopPropagation();
+    if (!this.tree.observable.length) {
+      return false;
+    }
     this.transferOperatorToDest(index);
 
     this.publishStream();
   }
 
-  dblClickArgsSrc(event, fromIndex) {
+  clickArgsSrc(event, fromIndex) {
     event.stopPropagation();
     let nextIndex = -1;
     this.tree.operators.forEach((operator, index) => {
@@ -167,7 +184,7 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dblClickObservableDest(event, fromContainer, fromIndex) {
+  clickObservableDest(event, fromContainer, fromIndex) {
     event.stopPropagation();
     this.transferObservableToSrc(fromContainer, fromIndex);
 
@@ -180,13 +197,13 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dblClickDestOperator(event, container, fromIndex) {
+  clickDestOperator(event, container, fromIndex) {
     this.transferOperatorToSrc(fromIndex);
 
     this.publishStream();
   }
 
-  dblClickDestArg(event, fromContainer, fromIndex) {
+  clickDestArg(event, fromContainer, fromIndex) {
     event.stopPropagation();
     this.transferArgToSrc(fromContainer, fromIndex);
 
@@ -302,8 +319,10 @@ export class PuzzleComponent {
     if (isEqual) {
       // TODO: Cancel previous setTimeout to prevent opening dialog in case if user has changed stream already.
       setTimeout(() => {
-        this.dialogInstance = this.dialog.open(SuccessDialogComponent);
-      }, 1000);
+        this.dialogInstance = this.dialog.open(SuccessDialogComponent, {data: {
+          nextCode: this.nextCode
+        }});
+      }, 400);
     } else {
       this.dialogInstance.close();
       this.dialogInstance = null;

@@ -18,7 +18,13 @@
     transition: left .3s cubic-bezier(0, 0, 0.2, 1);
 
     .controls {
+      border-bottom: 1px solid #ffffff;
+      padding-bottom: 8px;
       margin: 8px 0;
+
+      &:last-child {
+        border-bottom: 1px solid transparent;
+      }
 
       .list {
         display: flex;
@@ -36,13 +42,15 @@
           transform: translate(-50%, -50%);
           color: $backgroundTextColor;
           font-size: 22px;
+          font-weight: lighter;
         }
 
         &.no-data:not(.cdk-drop-list-dragging):before {
           content: "No Data";
         }
 
-        &.arguments {
+        &.arguments,
+        &.observables {
           >* {
             display: inline-block;
             padding: 16px;
@@ -123,10 +131,6 @@
 
           >* {
             display: inline-block;
-          }
-
-          .cdk-drag-placeholder {
-            display: inline-block;
             padding: 16px;
             margin: 4px 8px;
           }
@@ -156,7 +160,7 @@
           }
         }
 
-        .value-container {
+        .arg-container {
           display: flex;
           align-items: center;
           min-width: 32px;

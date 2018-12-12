@@ -38,6 +38,17 @@ export class PuzzlesService {
     return puzzle.length ? this.prepare(puzzle[0]) : null;
   }
 
+  getNextByCode(code: string) {
+    let next = null;
+    puzzles.forEach((item, index) => {
+      if (item.code === code && index + 1 !== puzzles.length) {
+        next = puzzles[index + 1].code;
+      }
+    });
+
+    return next;
+  }
+
   getByCode(code: string) {
     const puzzle = puzzles.filter((item) => item.code === code);
     return puzzle.length ? puzzle[0] : false;

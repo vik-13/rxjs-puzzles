@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'rxp-success-dialog',
@@ -6,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrls: ['success-dialog.scss']
 })
 export class SuccessDialogComponent {
-  constructor() {}
+  constructor(private router: Router,
+              private dialogRef: MatDialogRef<SuccessDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) private dialogData) {}
+
+  next() {
+    if (this.dialogData.nextCode) {
+      this.dialogRef.close();
+      this.router.navigate(['/puzzle', this.dialogData.nextCode]).then();
+    }
+  }
 }

@@ -2,13 +2,20 @@
 
 :host {
   display: table;
-  margin: 4px 8px;
-  background-color: $color1;
-  white-space: nowrap;
 
-  &.inner {
+  .mat-card {
+    margin: 4px 8px;
+    background-color: $color1;
+    white-space: nowrap;
+  }
+
+  &.inner,
+  &.mini {
     display: inline-block;
-    padding: 10px;
-    margin: -10px 8px;
+
+    .mat-card {
+      padding: 10px;
+      margin: -10px 8px;
+    }
   }
 }

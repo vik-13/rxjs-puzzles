@@ -10,7 +10,6 @@ export class OperatorComponent {
   @Input()
   set inner(value) { this.innerClass = value; }
   @HostBinding('class.inner') innerClass = false;
-  @HostBinding('class.mat-card') matCardClass = true;
 
   @Input()
   get operator() { return this._operator; }

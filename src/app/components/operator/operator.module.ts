@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material';
   ],
   imports: [
     CommonModule,
+
     MatCardModule
   ],
   exports: [

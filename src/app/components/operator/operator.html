@@ -1,4 +1,6 @@
-<ng-content></ng-content>
+<mat-card>
+  <ng-content></ng-content>
+</mat-card>
 <ng-container *ngIf="validity() as validityObject">
   <div class="mat-card error-message" *ngIf="!validityObject.valid">
     <span *ngIf="validityObject.required">

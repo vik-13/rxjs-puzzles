@@ -2,17 +2,21 @@
 
 :host {
   display: flex;
-  margin: 4px 8px;
-  background-color: $color2;
-  white-space: nowrap;
+  align-items: center;
+
+  .mat-card {
+    display: flex;
+    margin: 4px 8px;
+    background-color: $color2;
+    white-space: nowrap;
+  }
 
   .error-message {
     display: none;
-    position: absolute;
+    position: relative;
+    height: 32px;
     background-color: $warn;
     padding: 7px;
-    top: 9px;
-    left: calc(100% + 16px);
 
     &:after {
       content: "";
