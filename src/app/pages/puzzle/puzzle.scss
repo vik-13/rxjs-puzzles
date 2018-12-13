@@ -147,6 +147,16 @@
             margin: 4px 8px;
           }
 
+          &.cdk-drop-list-dragging {
+            >* {
+              transform: translate3d(0, 0, 0) !important;
+            }
+
+            >*:not(.cdk-drag-placeholder) {
+              display: none;
+            }
+          }
+
           &:before {
             content: "";
             position: absolute;
@@ -208,6 +218,16 @@
             display: inline-block;
             padding: 10px;
             margin: 0 8px;
+          }
+
+          &.cdk-drop-list-dragging {
+            >* {
+              transform: translate3d(0, 0, 0) !important;
+            }
+
+            >*:not(.cdk-drag-placeholder) {
+              display: none;
+            }
           }
         }
 
