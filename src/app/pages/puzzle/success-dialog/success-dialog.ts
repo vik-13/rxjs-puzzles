@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class SuccessDialogComponent {
   constructor(private router: Router,
               private dialogRef: MatDialogRef<SuccessDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private dialogData) {}
+              @Inject(MAT_DIALOG_DATA) public dialogData) {}
 
   next() {
     if (this.dialogData.nextCode) {

@@ -36,6 +36,7 @@ export class PuzzleComponent {
               private dialog: MatDialog) {
     route.params.subscribe((params) => {
       if (params.id) {
+        this.controlsIsOpen = false;
         this.tree = {
           observable: [],
           operators: []

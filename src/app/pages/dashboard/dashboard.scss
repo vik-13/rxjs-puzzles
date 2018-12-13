@@ -1,3 +1,5 @@
+@import "~src/assets/scss/variables";
+
 .container {
   display: block;
   padding: 16px;
@@ -14,6 +16,15 @@
       padding: 16px;
       cursor: pointer;
       user-select: none;
+
+      @media (max-width: $lg) {
+        flex: 0 0 50%;
+      }
+
+      @media (max-width: $sm) {
+        flex: 0 0 100%;
+        padding: 8px 0;
+      }
     }
   }
 

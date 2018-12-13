@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rx-puzzles": {
+    "rxjs-puzzles": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/rx-puzzles",
+            "outputPath": "dist/rxjs-puzzles",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -27,8 +27,6 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              // "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -63,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "rx-puzzles:build"
+            "browserTarget": "rxjs-puzzles:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "rx-puzzles:build:production"
+              "browserTarget": "rxjs-puzzles:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "rx-puzzles:build"
+            "browserTarget": "rxjs-puzzles:build"
           }
         },
         "test": {
@@ -85,7 +83,6 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
             "scripts": [],
@@ -109,7 +106,7 @@
         }
       }
     },
-    "rx-puzzles-e2e": {
+    "rxjs-puzzles-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -118,11 +115,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "rx-puzzles:serve"
+            "devServerTarget": "rxjs-puzzles:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "rx-puzzles:serve:production"
+              "devServerTarget": "rxjs-puzzles:serve:production"
             }
           }
         },
@@ -138,5 +135,5 @@
       }
     }
   },
-  "defaultProject": "rx-puzzles"
+  "defaultProject": "rxjs-puzzles"
 }

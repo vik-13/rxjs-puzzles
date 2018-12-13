@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input, ViewChild } from '@angular/core';
-import { CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component, HostBinding, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -15,7 +13,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
         backgroundColor: '#3D5A1F'
       })),
       state('notEqual', style({
-        backgroundColor: '#BC2D19'
+        backgroundColor: '#303030'
       })),
       transition('equal <=> notEqual', [
         animate('.5s')
@@ -52,16 +50,18 @@ export class StreamComponent {
   ticks: {value: number, left: string, visible: boolean}[] = [];
 
   constructor() {
-    // this.generateTicks();
+    this.generateTicks();
   }
 
   generateTicks() {
     for (let i = 0; i <= 100; i++) {
-      this.ticks.push({
-        value: i,
-        left: `${i}%`,
-        visible: !(i % 5)
-      });
+      if (!(i % 5)) {
+        this.ticks.push({
+          value: i,
+          left: `${i}%`,
+          visible: !(i % 10)
+        });
+      }
     }
   }
 }

@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { of, ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
-import { map, observeOn, reduce, switchMap, takeUntil, timestamp } from 'rxjs/operators';
+import { ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
+import { map, observeOn, reduce, takeUntil, timestamp } from 'rxjs/operators';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ElementType } from '../../puzzles/element-type';
 
 @Component({
-  selector: 'rxp-results',
-  templateUrl: 'results.html',
-  styleUrls: ['results.scss'],
+  selector: 'rxp-result',
+  templateUrl: 'result.html',
+  styleUrls: ['result.scss'],
   animations: [
     trigger('current', [
       state('small', style({
@@ -37,7 +37,7 @@ import { ElementType } from '../../puzzles/element-type';
     ])
   ]
 })
-export class ResultsComponent implements OnDestroy {
+export class ResultComponent implements OnDestroy {
 
   @Input()
   get source() {

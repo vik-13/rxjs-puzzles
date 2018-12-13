@@ -1,4 +1,5 @@
-<h1 mat-dialog-title>Congrats! You solved it!</h1>
-<mat-dialog-actions align="end">
-  <button mat-raised-button (click)="next()" color="primary">Next</button>
+<h1 mat-dialog-title>Congrats!</h1>
+<div mat-dialog-content *ngIf="!dialogData.nextCode">Great Job! It was the last puzzle from the list. Feel free to contribute new puzzles.</div>
+<mat-dialog-actions align="end" *ngIf="dialogData.nextCode">
+  <button mat-raised-button (click)="next()" color="accent">Next (#{{dialogData.nextCode}})</button>
 </mat-dialog-actions>

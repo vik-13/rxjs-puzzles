@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
-import { ArgComponent } from './arg';
+import { ResultComponent } from './result';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material';
+import { StreamModule } from '../stream/stream.module';
 
 @NgModule({
   declarations: [
-    ArgComponent
+    ResultComponent
   ],
   imports: [
     CommonModule,
-
-    MatCardModule
+    MatCardModule,
+    StreamModule
   ],
   exports: [
-    ArgComponent
+    ResultComponent
   ]
 })
-export class ArgModule {}
+export class ResultModule {}

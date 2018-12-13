@@ -1,0 +1,29 @@
+@import "variables";
+
+// TODO: Must be moved out from here into encapsulated styles.
+
+@mixin elements() {
+  .element {
+    display: table;
+    margin: 4px 8px;
+    white-space: nowrap;
+
+    &.element-observable {
+      background-color: $observableColor;
+    }
+
+    &.element-operator {
+      background-color: $operatorColor;
+    }
+
+    &.element-arg {
+      background-color: $argColor;
+    }
+
+    &.small {
+      display: inline-block;
+      padding: 10px;
+      margin: -10px 8px;
+    }
+  }
+}

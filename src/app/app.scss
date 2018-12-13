@@ -1,13 +1,13 @@
+@import "~src/assets/scss/variables";
+
 .main {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  background-color: #303030;
-  color: #fff;
 
   mat-toolbar {
-    padding-left: 0;
+    padding-left: 16px;
     flex: 0 0 auto;
     transition: padding-left .3s cubic-bezier(0, 0, 0.2, 1);
 
@@ -20,8 +20,9 @@
       }
     }
 
-    @media (max-width: 960px) {
-      padding-left: 64px;
+    @media (max-width: $sm) {
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 

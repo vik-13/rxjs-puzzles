@@ -1,8 +1,7 @@
 <div class="stream-wrapper">
   <div class="stream-background">
     <div class="line"></div>
-    <div class="tick" *ngFor="let tick of ticks" [class.visible]="tick.visible" [style.left]="tick.left">
-      <span>{{tick.value}}</span>
+    <div class="tick" *ngFor="let tick of ticks" [class.visible]="tick.visible" [class.zero]="!tick.value" [style.left]="tick.left">
     </div>
   </div>
   <div class="stream">

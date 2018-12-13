@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$rxp-primary: mat-palette($mat-purple);
+$rxp-accent: mat-palette($mat-green, A200, A100, A400);
+$rxp-warn: mat-palette($mat-red);
+
+$rxp-theme: mat-dark-theme($rxp-primary, $rxp-accent, $rxp-warn);

@@ -19,6 +19,7 @@
         </mat-card>
       </div>
     </div>
+    <div class="control-divider"></div>
     <div class="controls">
       <div class="list operators"
            [class.no-data]="!puzzle?.operatorsCollection.length"
@@ -36,6 +37,7 @@
         </rxp-operator>
       </div>
     </div>
+    <div class="control-divider"></div>
     <div class="controls">
       <div class="list arguments"
            [class.no-data]="!puzzle?.args.length"
@@ -45,13 +47,13 @@
            [cdkDropListConnectedTo]="getAllIds()"
            [cdkDropListEnterPredicate]="enterPredicateOnlyArguments"
            (cdkDropListDropped)="dropToArgsSrc($event)">
-        <rxp-arg cdkDrag
+        <mat-card class="element element-arg" cdkDrag
                  (cdkDragStarted)="startDragging()"
                  [cdkDragData]="arg"
                  (click)="clickArgsSrc($event, index);"
                  *ngFor="let arg of puzzle?.args; let index = index;">
           {{arg.title}}
-        </rxp-arg>
+        </mat-card>
       </div>
     </div>
   </div>
@@ -79,7 +81,7 @@
             {{observable.title}}
           </mat-card>
         </div>
-        <div class="operators-container"
+        <div class="operators-container" [class.no-operators]="!tree.operators.length"
              #destOperators="cdkDropList"
              cdkDropList
              [cdkDropListConnectedTo]="'operator-list'"
@@ -123,5 +125,5 @@
       </div>
     </div>
   </div>
-  <rxp-results [source]="source$" [pattern]="puzzle?.pattern" (equality)="equality($event)"></rxp-results>
+  <rxp-result [source]="source$" [pattern]="puzzle?.pattern" (equality)="equality($event)"></rxp-result>
 </div>

@@ -1,5 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
 
+@import "assets/scss/theme";
 @import "assets/scss/elements";
 
 html, body { height: 100%; }
@@ -7,4 +7,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 * {
   box-sizing: border-box;
+}
+
+
+.rxp-dark-theme {
+  @include angular-material-theme($rxp-theme);
+
+  @include elements();
 }

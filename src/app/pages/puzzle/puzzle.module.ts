@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PuzzleComponent } from './puzzle';
 import { MatButtonModule, MatCardModule, MatDialogModule } from '@angular/material';
-import { ResultsModule } from '../../components/results/results.module';
-import { ObservableModule } from '../../components/observable/observable.module';
+import { ResultModule } from '../../components/result/result.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { StreamModule } from '../../components/stream/stream.module';
 import { OperatorModule } from '../../components/operator/operator.module';
-import { ArgModule } from '../../components/arg/arg.module';
 import { SuccessDialogComponent } from './success-dialog/success-dialog';
 import { RouterModule } from '@angular/router';
 
@@ -23,14 +21,12 @@ import { RouterModule } from '@angular/router';
     MatCardModule,
     MatDialogModule,
     MatButtonModule,
-    ResultsModule,
+    ResultModule,
 
     DragDropModule,
 
     StreamModule,
-    ObservableModule,
-    OperatorModule,
-    ArgModule
+    OperatorModule
   ],
   exports: [
     PuzzleComponent,

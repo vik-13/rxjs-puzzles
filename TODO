@@ -1,6 +1,6 @@
-TODO: Add dashboard;
-TODO: Show message in case of streams are equal;
-TODO: Show error at the right of operator if there is no arguments or arguments is invalid;
-TODO: Mobile view support;
-TODO: Add animations;
+TODO: Store progress (localStorage?)
+TODO: Improve animations;
 TODO: Store puzzles somewhere? Firestore?;
+TODO: Extend operators and observables lists;
+TODO: Make possible to add operators to observable, which is passed as argument;
+TODO: Make possible to create custom arguments?
