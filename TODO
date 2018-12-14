@@ -1,4 +1,4 @@
-TODO: Store progress (localStorage?)
+TODO: Store progress(latest state of solving puzzles) (localStorage?)
 TODO: Improve animations;
 TODO: Store puzzles somewhere? Firestore?;
 TODO: Extend operators and observables lists;
