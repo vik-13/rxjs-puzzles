@@ -2,9 +2,18 @@ import { Injectable } from '@angular/core';
 import { Puzzle, puzzles } from './puzzles';
 import { OperatorsCollection } from './operators';
 
+const LOCAL_STORAGE_KEY = 'rxjs-puzzles-solved';
+
 @Injectable()
 export class PuzzlesService {
-  constructor() {}
+  solved: string[] = [];
+
+  constructor() {
+    const solved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (solved) {
+      this.solved = JSON.parse(solved);
+    }
+  }
 
   prepare(puzzle: Puzzle) {
     return {
@@ -56,5 +65,18 @@ export class PuzzlesService {
 
   getAll() {
     return puzzles;
+  }
+
+  setAsSolved(code: string) {
+    this.solved = [...this.solved, code].filter((value, index, self) => self.indexOf(value) === index);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.solved));
+  }
+
+  isSolved(code: string) {
+    return typeof this.solved.find((item) => item === code) !== 'undefined';
+  }
+
+  getSolved() {
+    return this.solved;
   }
 }

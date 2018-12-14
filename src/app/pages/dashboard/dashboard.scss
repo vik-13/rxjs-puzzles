@@ -17,6 +17,10 @@
       cursor: pointer;
       user-select: none;
 
+      .mat-card.solved {
+        background: #3D5A1F;
+      }
+
       @media (max-width: $lg) {
         flex: 0 0 50%;
       }

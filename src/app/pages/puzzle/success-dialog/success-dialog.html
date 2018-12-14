@@ -1,5 +1,6 @@
 <h1 mat-dialog-title>Congrats!</h1>
 <div mat-dialog-content *ngIf="!dialogData.nextCode">Great Job! It was the last puzzle from the list. Feel free to contribute new puzzles.</div>
-<mat-dialog-actions align="end" *ngIf="dialogData.nextCode">
-  <button mat-raised-button (click)="next()" color="accent">Next (#{{dialogData.nextCode}})</button>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="next()" color="accent" *ngIf="dialogData.nextCode">Next (#{{dialogData.nextCode}})</button>
+  <button mat-raised-button (click)="dashboard()" color="primary" *ngIf="!dialogData.nextCode">Dashboard</button>
 </mat-dialog-actions>

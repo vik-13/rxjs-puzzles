@@ -1,10 +1,11 @@
 <div class="container">
   <div class="puzzles-container">
     <div class="puzzle" *ngFor="let puzzle of puzzles">
-      <mat-card [routerLink]="['/puzzle', puzzle.code]">
+      <mat-card [routerLink]="['/puzzle', puzzle.code]" [class.solved]="isSolved(puzzle.code)">
         <mat-card-title>#{{puzzle.code}}</mat-card-title>
         <mat-card-content>
-          <rxp-stream [preview]="true" [stream$]="getStream(puzzle.pattern)"></rxp-stream>
+          <rxp-stream [preview]="true"
+                      [stream$]="getStream(puzzle.pattern)"></rxp-stream>
         </mat-card-content>
       </mat-card>
     </div>

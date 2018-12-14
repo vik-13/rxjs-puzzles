@@ -318,6 +318,8 @@ export class PuzzleComponent {
 
   equality(isEqual) {
     if (isEqual) {
+      this.controlsIsOpen = false;
+      this.puzzlesService.setAsSolved(this.puzzle.code);
       // TODO: Cancel previous setTimeout to prevent opening dialog in case if user has changed stream already.
       setTimeout(() => {
         this.dialogInstance = this.dialog.open(SuccessDialogComponent, {data: {

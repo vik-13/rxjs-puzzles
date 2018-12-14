@@ -18,4 +18,9 @@ export class SuccessDialogComponent {
       this.router.navigate(['/puzzle', this.dialogData.nextCode]).then();
     }
   }
+
+  dashboard() {
+    this.dialogRef.close();
+    this.router.navigate(['/dashboard']).then();
+  }
 }

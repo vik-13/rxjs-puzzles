@@ -19,4 +19,8 @@ export class DashboardComponent {
   getStream(pattern) {
     return of(pattern.map((item) => ({time: item[0], value: item[1]})));
   }
+
+  isSolved(code: string) {
+    return this.puzzlesService.isSolved(code);
+  }
 }
