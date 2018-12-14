@@ -12,8 +12,8 @@ export class PuzzlesService {
       observables: [
         ...puzzle.observables
       ],
-      args: [
-        ...puzzle.args
+      expressions: [
+        ...puzzle.expressions
       ],
       operatorsCollection: puzzle.operators.map((operatorType, index) => {
         const operator = {...OperatorsCollection[operatorType]};

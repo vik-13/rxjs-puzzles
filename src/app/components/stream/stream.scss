@@ -1,4 +1,4 @@
-@import "../../../assets/scss/variables";
+@import "~src/assets/scss/variables";
 
 :host {
   .stream-wrapper {
@@ -61,6 +61,64 @@
       height: 100%;
       position: relative;
       margin: 0 32px;
+    }
+
+    @media (max-width: $lg) {
+      .stream {
+        .rxp-bead {
+          width: 24px;
+          height: 24px;
+          font-size: 14px;
+          line-height: 24px;
+          background-color: $successColor;
+        }
+      }
+    }
+
+    @media (max-width: $sm) {
+      .stream-background {
+        width: calc(100% - 32px);
+        margin: 0 16px;
+
+        .line {
+          margin: 0 -16px;
+        }
+      }
+
+      .stream {
+        margin: 0 16px;
+
+        .rxp-bead {
+          width: 18px;
+          height: 18px;
+          font-size: 11px;
+          line-height: 18px;
+          background-color: $successColor;
+        }
+      }
+    }
+
+    @media (max-width: $xs) {
+      .stream-background {
+        width: calc(100% - 32px);
+        margin: 0 16px;
+
+        .line {
+          margin: 0 -16px;
+        }
+      }
+
+      .stream {
+        margin: 0 16px;
+
+        .rxp-bead {
+          width: 12px;
+          height: 12px;
+          font-size: 8px;
+          line-height: 12px;
+          background-color: $successColor;
+        }
+      }
     }
   }
 

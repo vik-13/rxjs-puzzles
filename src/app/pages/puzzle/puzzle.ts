@@ -80,11 +80,11 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dropToArgsSrc(event: CdkDragDrop<any>) {
+  dropToExpressionsSrc(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      this.transferArgToSrc(event.previousContainer.data, event.previousIndex, event.currentIndex);
+      this.transferExpressionToSrc(event.previousContainer.data, event.previousIndex, event.currentIndex);
     }
 
     this.publishStream();
@@ -110,7 +110,7 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  dropArgToDest(event: CdkDragDrop<any>) {
+  dropArgumentToDest(event: CdkDragDrop<any>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -123,7 +123,7 @@ export class PuzzleComponent {
           }
         }
       } else {
-        this.transferArgToDest(event.container.data, event.previousIndex, 0, event.previousContainer.data);
+        this.transferExpressionToDest(event.container.data, event.previousIndex, 0, event.previousContainer.data);
       }
     }
 
@@ -131,7 +131,7 @@ export class PuzzleComponent {
   }
 
   getAllIds() {
-    const idsList = ['src-arguments', 'observable-list', 'dest-observable'];
+    const idsList = ['src-expressions', 'observable-list', 'dest-observable'];
 
     for (let i = 0; i < 32; i++) {
       idsList.push(`dest-argument-${i}`);
@@ -169,7 +169,7 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  clickArgsSrc(event, fromIndex) {
+  clickExpressionsSrc(event, fromIndex) {
     event.stopPropagation();
     let nextIndex = -1;
     this.tree.operators.forEach((operator, index) => {
@@ -179,7 +179,7 @@ export class PuzzleComponent {
     });
 
     if (nextIndex !== -1 || (this.tree.operators.length && this.tree.operators[this.tree.operators.length - 1].argType)) {
-      this.transferArgToDest(this.tree.operators[nextIndex !== -1 ? nextIndex : this.tree.operators.length - 1].values, fromIndex);
+      this.transferExpressionToDest(this.tree.operators[nextIndex !== -1 ? nextIndex : this.tree.operators.length - 1].values, fromIndex);
     }
 
     this.publishStream();
@@ -204,9 +204,9 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
-  clickDestArg(event, fromContainer, fromIndex) {
+  clickDestExpression(event, fromContainer, fromIndex) {
     event.stopPropagation();
-    this.transferArgToSrc(fromContainer, fromIndex);
+    this.transferExpressionToSrc(fromContainer, fromIndex);
 
     this.publishStream();
   }
@@ -217,7 +217,7 @@ export class PuzzleComponent {
         if (toContainer[i].type === ElementType.OBSERVABLE) {
           this.transferObservableToSrc(toContainer, i);
         } else {
-          this.transferArgToSrc(toContainer, i);
+          this.transferExpressionToSrc(toContainer, i);
         }
       }
     }
@@ -234,13 +234,13 @@ export class PuzzleComponent {
       toIndex);
   }
 
-  transferArgToDest(toContainer, fromIndex, toIndex = 0, fromContainer = this.puzzle.args) {
+  transferExpressionToDest(toContainer, fromIndex, toIndex = 0, fromContainer = this.puzzle.expressions) {
     if (toContainer.length) {
       for (let i = toContainer.length - 1; i >= 0; i--) {
         if (toContainer[i].type === ElementType.OBSERVABLE) {
           this.transferObservableToSrc(toContainer, i);
         } else {
-          this.transferArgToSrc(toContainer, i);
+          this.transferExpressionToSrc(toContainer, i);
         }
       }
     }
@@ -264,7 +264,7 @@ export class PuzzleComponent {
         if (this.tree.operators[fromIndex].values[i].type === ElementType.OBSERVABLE) {
           this.transferObservableToSrc(this.tree.operators[fromIndex].values, i);
         } else {
-          this.transferArgToSrc(this.tree.operators[fromIndex].values, i);
+          this.transferExpressionToSrc(this.tree.operators[fromIndex].values, i);
         }
       }
     }
@@ -274,9 +274,9 @@ export class PuzzleComponent {
       toIndex);
   }
 
-  transferArgToSrc(fromContainer, fromIndex, toIndex = this.puzzle.args.length) {
+  transferExpressionToSrc(fromContainer, fromIndex, toIndex = this.puzzle.expressions.length) {
     transferArrayItem(fromContainer,
-      this.puzzle.args,
+      this.puzzle.expressions,
       fromIndex,
       toIndex);
   }
@@ -308,12 +308,12 @@ export class PuzzleComponent {
     }
   }
 
-  enterPredicateOnlyArguments(drag: CdkDrag, drop: CdkDropList) {
+  enterPredicateOnlyExpressions(drag: CdkDrag, drop: CdkDropList) {
     return drag.data.type !== ElementType.OBSERVABLE;
   }
 
   enterPredicateOnlyObservables(drag: CdkDrag, drop: CdkDropList) {
-    return drag.data.type !== ElementType.ARGUMENT;
+    return drag.data.type !== ElementType.EXPRESSION;
   }
 
   equality(isEqual) {

@@ -9,7 +9,7 @@ export interface ObservableType {
   func: (scheduler: VirtualTimeScheduler) => Observable<number|boolean>;
 }
 
-export interface ArgType {
+export interface ExpressionType {
   title: string;
   value: number|Function;
 }
@@ -18,7 +18,7 @@ export interface Puzzle {
   code: string;
   observables: ObservableType[];
   operators: any[];
-  args: ArgType[];
+  expressions: ExpressionType[];
   pattern: number[][];
 }
 

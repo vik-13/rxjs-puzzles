@@ -1,7 +1,7 @@
 import { interval, timer } from 'rxjs';
 import { OPERATOR } from '../operators';
 import { Obs } from '../observables';
-import { Arg } from '../arguments';
+import { Expression } from '../expressions';
 
 export const puzzle004 = {
   code: '004',
@@ -15,9 +15,9 @@ export const puzzle004 = {
     OPERATOR.DEBOUNCE_TIME,
     OPERATOR.SAMPLE
   ],
-  args: [
-    new Arg(5),
-    new Arg((x) => x + 5, '(x) => x + 5')
+  expressions: [
+    new Expression(5),
+    new Expression((x) => x + 5, '(x) => x + 5')
   ],
   pattern: [[10, 0], [20, 1], [30, 2], [40, 3], [50, 4], [60, 5], [70, 6], [80, 7], [90, 8], [100, 9]]
 };

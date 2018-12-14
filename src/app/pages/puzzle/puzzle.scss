@@ -52,11 +52,11 @@
           content: "Operators";
         }
 
-        &.no-data.arguments:not(.cdk-drop-list-dragging):before {
-          content: "Arguments";
+        &.no-data.expressions:not(.cdk-drop-list-dragging):before {
+          content: "Expressions";
         }
 
-        &.arguments,
+        &.expressions,
         &.observables {
           >* {
             display: inline-block;
@@ -69,7 +69,6 @@
 
     .control-divider {
       border-bottom: 1px solid #ffffff;
-      margin: 0 -16px;
     }
 
     @media (max-width: 960px) {

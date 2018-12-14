@@ -39,19 +39,19 @@
     </div>
     <div class="control-divider"></div>
     <div class="controls">
-      <div class="list arguments"
-           [class.no-data]="!puzzle?.args.length"
-           id="src-arguments"
+      <div class="list expressions"
+           [class.no-data]="!puzzle?.expressions.length"
+           id="src-expressions"
            cdkDropList
-           [cdkDropListData]="puzzle?.args"
+           [cdkDropListData]="puzzle?.expressions"
            [cdkDropListConnectedTo]="getAllIds()"
-           [cdkDropListEnterPredicate]="enterPredicateOnlyArguments"
-           (cdkDropListDropped)="dropToArgsSrc($event)">
-        <mat-card class="element element-arg" cdkDrag
+           [cdkDropListEnterPredicate]="enterPredicateOnlyExpressions"
+           (cdkDropListDropped)="dropToExpressionsSrc($event)">
+        <mat-card class="element element-expressions" cdkDrag
                  (cdkDragStarted)="startDragging()"
                  [cdkDragData]="arg"
-                 (click)="clickArgsSrc($event, index);"
-                 *ngFor="let arg of puzzle?.args; let index = index;">
+                 (click)="clickExpressionsSrc($event, index);"
+                 *ngFor="let arg of puzzle?.expressions; let index = index;">
           {{arg.title}}
         </mat-card>
       </div>
@@ -101,7 +101,7 @@
                   [cdkDropListData]="operator.values"
                   [cdkDropListOrientation]="'horizontal'"
                   [cdkDropListConnectedTo]="getAllIds()"
-                  (cdkDropListDropped)="dropArgToDest($event)">
+                  (cdkDropListDropped)="dropArgumentToDest($event)">
               <ng-container *ngFor="let arg of operator.values; let index = index;">
                 <mat-card class="element element-observable small"
                           cdkDrag
@@ -110,11 +110,11 @@
                           *ngIf="arg.type === 'observable'">
                   {{arg.title}}
                 </mat-card>
-                <mat-card class="element element-arg small"
+                <mat-card class="element element-expressions small"
                           cdkDrag
                           [cdkDragData]="arg"
-                          (click)="clickDestArg($event, operator.values, index);"
-                          *ngIf="arg.type === 'argument'">
+                          (click)="clickDestExpression($event, operator.values, index);"
+                          *ngIf="arg.type === 'expression'">
                   {{arg.title}}
                 </mat-card>
               </ng-container>

@@ -1,6 +1,6 @@
 import { interval, timer } from 'rxjs';
 import { OPERATOR } from '../operators';
-import { Arg } from '../arguments';
+import { Expression } from '../expressions';
 import { Obs } from '../observables';
 
 export const puzzle003 = {
@@ -18,9 +18,9 @@ export const puzzle003 = {
     OPERATOR.CONCAT_MAP,
     OPERATOR.SWITCH_MAP
   ],
-  args: [
-    new Arg(5),
-    new Arg((x) => x + 5, '(x) => x + 5')
+  expressions: [
+    new Expression(5),
+    new Expression((x) => x + 5, '(x) => x + 5')
   ],
   pattern: [[25, 0], [30, 1], [40, 0], [45, 1], [55, 0], [60, 1], [70, 0], [75, 1], [85, 0], [90, 1], [100, 0]]
 };

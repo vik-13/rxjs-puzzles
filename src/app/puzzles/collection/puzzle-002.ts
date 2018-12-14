@@ -1,7 +1,7 @@
-import { interval, of, timer } from 'rxjs';
+import { interval } from 'rxjs';
 import { Obs } from '../observables';
 import { OPERATOR } from '../operators';
-import { Arg } from '../arguments';
+import { Expression } from '../expressions';
 
 export const puzzle002 = {
   code: '002',
@@ -11,8 +11,8 @@ export const puzzle002 = {
   operators: [
     OPERATOR.MAP
   ],
-  args: [
-    new Arg(x => x + 2, 'x => x + 2')
+  expressions: [
+    new Expression(x => x + 2, 'x => x + 2')
   ],
   pattern: [[10, 2], [20, 3], [30, 4], [40, 5], [50, 6], [60, 7], [70, 8], [80, 9], [90, 10], [100, 11]]
 };
