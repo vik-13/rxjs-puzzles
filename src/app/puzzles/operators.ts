@@ -79,7 +79,7 @@ export const OperatorsCollection = {
   [OPERATOR.DEBOUNCE]: {
     title: 'debounce(x => {{argument}})',
     func: (arg, scheduler) => debounce(x => arg),
-    argType: ArgumentType.NUMBER,
+    argType: ArgumentType.OBSERVABLE,
     argRequired: true
   },
   [OPERATOR.DEBOUNCE_TIME]: {

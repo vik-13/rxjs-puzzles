@@ -17,8 +17,12 @@
       cursor: pointer;
       user-select: none;
 
-      .mat-card.solved {
-        background: #3D5A1F;
+      .mat-card {
+        outline: transparent;
+
+        &.solved {
+          background: #3D5A1F;
+        }
       }
 
       @media (max-width: $lg) {

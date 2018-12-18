@@ -121,6 +121,7 @@ export class ResultComponent implements OnDestroy {
           });
         }))
         .subscribe((list) => {
+          // console.log(JSON.stringify(list.map((item) => ([item.time, item.value]))));
           this.outputSource$.next(list);
         });
 
