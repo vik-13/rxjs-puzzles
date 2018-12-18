@@ -1,4 +1,5 @@
-TODO: Store progress(latest state of solving puzzles) (localStorage?)
+TODO: Handle case, when two or more emits happened at the same time;
+TODO: Store progress(latest state of solving puzzles) (localStorage?);
 TODO: Improve animations;
 TODO: Store puzzles somewhere? Firestore?;
 TODO: Extend operators and observables lists;
