@@ -1,5 +1,8 @@
 
-@import "assets/scss/theme";
+// @import "assets/scss/theme";
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 @import "assets/scss/elements";
 
 html, body { height: 100%; }
@@ -11,7 +14,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 .rxp-dark-theme {
-  @include angular-material-theme($rxp-theme);
+  // @include angular-material-theme($rxp-theme);
 
   @include elements();
 }
