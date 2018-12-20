@@ -1,4 +1,4 @@
-<div class="current" [@current]="isEqual ? 'big' : 'small'">
+<div class="current" [@current]="isEqual ? 'big' : 'small'" [class.valid]="source?.valid">
   <rxp-stream [stream$]="outputSource$" [isEqual]="isEqual"></rxp-stream>
 </div>
 <div class="sample" [@sample]="isEqual ? 'hidden' : 'visible'">

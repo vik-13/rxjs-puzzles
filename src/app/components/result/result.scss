@@ -18,6 +18,12 @@
     right: 0;
     left: 0;
     overflow: hidden;
+    opacity: .3;
+    transition: opacity .3s cubic-bezier(0, 0, 0.2, 1);
+
+    &.valid {
+      opacity: 1;
+    }
   }
 
   .sample {

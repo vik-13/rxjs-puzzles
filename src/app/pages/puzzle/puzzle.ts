@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Renderer2 } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { interval, Subject, timer } from 'rxjs';
-import { debounceTime, filter, map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { PuzzlesService } from '../../puzzles/puzzles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkValidity } from '../../puzzles/operators';
@@ -130,6 +129,7 @@ export class PuzzleComponent {
     this.publishStream();
   }
 
+  // TODO: Find better way to connect drop lists, which are generated dynamically and cannot be simply grouped.
   getAllIds() {
     const idsList = ['src-expressions', 'observable-list', 'dest-observable'];
 

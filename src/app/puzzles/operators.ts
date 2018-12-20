@@ -137,13 +137,13 @@ export const OperatorsCollection = {
     argRequired: true
   },
   [OPERATOR.TAKE_UNTIL]: {
-    title: 'skipUntil({{argument}})',
+    title: 'takeUntil({{argument}})',
     func: (arg, scheduler) => takeUntil(arg),
     argType: ArgumentType.OBSERVABLE,
     argRequired: true
   },
   [OPERATOR.TAKE_WHILE]: {
-    title: 'skipWhile({{argument}})',
+    title: 'takeWhile({{argument}})',
     func: (arg, scheduler) => takeWhile(arg),
     argType: ArgumentType.FUNCTION,
     argRequired: true

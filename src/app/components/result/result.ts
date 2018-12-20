@@ -45,6 +45,7 @@ export class ResultComponent implements OnDestroy {
   }
   set source(value) {
     if (value) {
+      // TODO: DO NOT subscribe here. Create new stream with the result.
       value.subscribe((data) => {
         this._source = data;
         this.prepareOutputSource();

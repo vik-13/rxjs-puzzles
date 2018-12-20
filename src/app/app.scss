@@ -9,7 +9,7 @@
   mat-toolbar {
     padding-left: 16px;
     flex: 0 0 auto;
-    transition: padding-left .3s cubic-bezier(0, 0, 0.2, 1);
+    transition: left .3s cubic-bezier(0, 0, 0.2, 1);
 
     nav {
       display: flex;
