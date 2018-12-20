@@ -1,6 +1,6 @@
 <div class="current" [@current]="isEqual ? 'big' : 'small'" [class.valid]="source?.valid">
-  <rxp-stream [stream$]="outputSource$" [isEqual]="isEqual"></rxp-stream>
+  <rxp-stream [stream$]="source$" [isEqual]="isEqual"></rxp-stream>
 </div>
 <div class="sample" [@sample]="isEqual ? 'hidden' : 'visible'">
-  <rxp-stream [stream$]="outputDestination$"></rxp-stream>
+  <rxp-stream [stream$]="pattern$"></rxp-stream>
 </div>

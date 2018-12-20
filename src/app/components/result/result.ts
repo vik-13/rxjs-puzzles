@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
+import { Observable, ReplaySubject, Subject, Subscription, Timestamp, VirtualTimeScheduler } from 'rxjs';
 import { map, observeOn, reduce, takeUntil, timestamp } from 'rxjs/operators';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ElementType } from '../../puzzles/element-type';
@@ -53,6 +53,7 @@ export class ResultComponent implements OnDestroy {
     }
   }
   private _source;
+  private source$ = new ReplaySubject(1);
 
   @Input()
   get pattern() {
@@ -64,20 +65,19 @@ export class ResultComponent implements OnDestroy {
     } else {
       this._pattern = [];
     }
-    this.outputDestination$.next(this._pattern);
+    this.pattern$.next(this._pattern);
   }
   private _pattern;
+  pattern$ = new ReplaySubject(1);
 
   @Output() equality: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  outputSource$ = new ReplaySubject(1);
-  outputDestination$ = new ReplaySubject(1);
   isEqual = false;
 
   compareSubscription: Subscription;
 
   constructor() {
-    this.compareSubscription = this.outputSource$.subscribe((sourceList: any[]) => {
+    this.compareSubscription = this.source$.subscribe((sourceList: any[]) => {
       let isEqual = true;
       if (sourceList.length === this.pattern.length) {
         sourceList.forEach((item, index) => {
@@ -123,13 +123,13 @@ export class ResultComponent implements OnDestroy {
         }))
         .subscribe((list) => {
           // console.log(JSON.stringify(list.map((item) => ([item.time, item.value]))));
-          this.outputSource$.next(list);
+          this.source$.next(list);
         });
 
       scheduler.flush();
       stop$.next();
     } else {
-      this.outputSource$.next([]);
+      this.source$.next([]);
     }
   }
 
