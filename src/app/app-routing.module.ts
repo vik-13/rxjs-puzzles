@@ -5,17 +5,13 @@ import { PuzzleComponent } from './pages/puzzle/puzzle';
 
 const routes: Routes = [{
   path: '',
-  redirectTo: 'dashboard',
-  pathMatch: 'full'
-}, {
-  path: 'dashboard',
   component: DashboardComponent
 }, {
   path: 'puzzle/:id',
   component: PuzzleComponent
 }, {
   path: '**',
-  redirectTo: 'dashboard'
+  redirectTo: ''
 }];
 
 @NgModule({
