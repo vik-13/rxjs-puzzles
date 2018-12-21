@@ -1,4 +1,5 @@
-TODO: Handle case, when two or more emits happened at the same time;
+DONE: Handle case, when two or more emits happened at the same time;
+
 TODO: In case of dragging argument from one operator to another, arguments should be just switched.
 TODO: Add show info about each element (snippets from RxJS docs?);
 TODO: Store progress(latest state of solving puzzles) (localStorage?);
