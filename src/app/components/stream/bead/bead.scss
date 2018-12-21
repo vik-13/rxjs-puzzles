@@ -5,14 +5,12 @@
   width: 32px;
   height: 32px;
   position: absolute;
-  top: 50%;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
 
   background-color: $backgroundColor;
   border: 1px solid #ffffff;
 
-  transition: opacity 1s;
+  transition: opacity 1s, top .3s;
 
   line-height: 32px;
   text-align: center;

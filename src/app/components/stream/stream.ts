@@ -2,6 +2,7 @@ import { Component, HostBinding, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'rxp-stream',
@@ -25,7 +26,23 @@ export class StreamComponent {
   @Input()
   get stream$() { return this._stream$; }
   set stream$(value: Observable<any>) {
-    this._stream$ = value;
+    this._stream$ = value.pipe(map((streamData) => {
+      const groups = [];
+      let group;
+      let time = null;
+      streamData.forEach((item) => {
+        if (time !== item.time) {
+          time = item.time;
+          group = {
+            time,
+            beads: []
+          };
+          groups.push(group);
+        }
+        group.beads.push(item);
+      });
+      return groups;
+    }));
   }
   private _stream$: Observable<any>;
 

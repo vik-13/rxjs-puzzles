@@ -1,0 +1,8 @@
+<rxp-bead *ngFor="let bead of group.beads; let index = index"
+          [element]="bead"
+          [isEqual]="isEqual"
+          [index]="index"
+          [active]="active">
+  {{bead.value}}
+</rxp-bead>
+<div class="interactive-placeholder" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()"></div>
