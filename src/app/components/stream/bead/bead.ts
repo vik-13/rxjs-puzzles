@@ -12,6 +12,7 @@ export class BeadComponent {
   get isEqual() { return this._isEqual; }
   set isEqual(value) {
     this._isEqual = coerceBooleanProperty(value);
+    this.rxpIsEqualClass = this._isEqual;
   }
   private _isEqual: boolean;
 
@@ -41,6 +42,7 @@ export class BeadComponent {
   private _element;
 
   @HostBinding('class.rxp-bead') rxpBeadClass = true;
+  @HostBinding('class.is-equal') rxpIsEqualClass = false;
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
 }
