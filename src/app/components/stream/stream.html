@@ -6,7 +6,7 @@
   </div>
   <div class="stream">
     <ng-container *ngIf="stream$ | async as stream">
-      <rxp-bead-group *ngFor="let group of stream" [group]="group" [isEqual]="isEqual"></rxp-bead-group>
+      <rxp-bead-group *ngFor="let group of stream" [group]="group" [isEqual]="isEqual" [preview]="preview"></rxp-bead-group>
     </ng-container>
   </div>
 </div>

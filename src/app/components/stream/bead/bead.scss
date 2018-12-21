@@ -1,9 +1,11 @@
 @import "~src/assets/scss/variables";
 
 :host {
-  display: block;
-  width: 32px;
-  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   position: absolute;
   border-radius: 50%;
 
@@ -11,10 +13,11 @@
   border: 1px solid #ffffff;
 
   transition: opacity 1s, top .3s;
-
-  line-height: 32px;
-  text-align: center;
   color: white;
   cursor: default;
   user-select: none;
+
+  &.is-equal {
+    background-color: $successColor;
+  }
 }

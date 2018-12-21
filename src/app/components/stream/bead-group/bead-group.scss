@@ -17,4 +17,40 @@
     left: 0;
     z-index: 1;
   }
+
+  @media (max-width: $lg) {
+    width: 24px;
+    height: 24px;
+
+    .rxp-bead {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: $sm) {
+    width: 18px;
+    height: 18px;
+
+    .rxp-bead {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: $xs) {
+    width: 12px;
+    height: 12px;
+
+    .rxp-bead {
+      font-size: 8px;
+    }
+  }
+
+  &.preview {
+    width: 12px;
+    height: 12px;
+
+    .rxp-bead {
+      font-size: 8px;
+    }
+  }
 }
