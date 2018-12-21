@@ -95,6 +95,7 @@ export class PuzzlesService {
           observable: [observable],
           operators: []
         };
+
         if (this.checkEquality(tree, puzzle.pattern)) {
           solutionsCount++;
         }
