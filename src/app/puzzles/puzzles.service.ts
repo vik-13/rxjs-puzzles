@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Puzzle, puzzles } from './puzzles';
 import { OperatorsCollection } from './operators';
+import { Subject, Timestamp, VirtualTimeScheduler } from 'rxjs';
+import { ElementType } from './element-type';
+import { map, observeOn, reduce, takeUntil, timestamp } from 'rxjs/operators';
 
 const LOCAL_STORAGE_KEY = 'rxjs-puzzles-solved';
 
@@ -13,6 +16,8 @@ export class PuzzlesService {
     if (solved) {
       this.solved = JSON.parse(solved);
     }
+
+    this.validate();
   }
 
   prepare(puzzle: Puzzle) {
@@ -78,5 +83,68 @@ export class PuzzlesService {
 
   getSolved() {
     return this.solved;
+  }
+
+  validate() {
+    puzzles.forEach((sourcePuzzle) => {
+      let solutionsCount = 0;
+      const puzzle = this.prepare(sourcePuzzle);
+      let tree;
+      puzzle.observables.forEach((observable) => {
+        tree = {
+          observable: [observable],
+          operators: []
+        };
+        if (this.checkEquality(tree, puzzle.pattern)) {
+          solutionsCount++;
+        }
+      });
+      console.log(`Code: ${puzzle.code}, Possible solutions: ${solutionsCount}`);
+    });
+  }
+
+  checkEquality(tree, sourcePattern) {
+    let isEqual = false;
+    const stop$ = new Subject();
+    const scheduler = new VirtualTimeScheduler(undefined, 100);
+
+    tree.observable[0].func(scheduler)
+      .pipe(...tree.operators.map((item) => {
+        return !item.values.length ? item.func() : item.func(item.values[0].type === ElementType.OBSERVABLE ?
+          item.values[0].func(scheduler) :
+          item.values[0].value, scheduler);
+      }))
+      .pipe(observeOn(scheduler))
+      .pipe(timestamp(scheduler))
+      .pipe(map((data: Timestamp<any>) => ({value: data.value, time: data.timestamp})))
+      .pipe(takeUntil(stop$))
+      .pipe(reduce((a: any, b: any) => {
+        return a.concat(b);
+      }, []))
+      .pipe(map((list: any[]) => {
+        return list.map((item) => {
+          if (typeof item.value === 'boolean' ) {
+            item.value = item.value ? 'T' : 'F';
+          }
+          return item;
+        });
+      }))
+      .subscribe((list) => {
+        const pattern = sourcePattern.map((item) => ({time: item[0], value: item[1]}));
+        isEqual = true;
+        if (list.length === pattern.length) {
+          list.forEach((item, index) => {
+            if (item.value !== pattern[index].value || item.time !== pattern[index].time) {
+              isEqual = false;
+            }
+          });
+        } else {
+          isEqual = false;
+        }
+      });
+
+    scheduler.flush();
+    stop$.next();
+    return isEqual;
   }
 }
