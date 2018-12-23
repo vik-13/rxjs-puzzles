@@ -1,5 +1,6 @@
 DONE: Handle case, when two or more emits happened at the same time;
 
+TODO: Add info property (should be component class?) for operators and observables (Create wrapper for observables to be easier to use)
 TODO: Create puzzle validation.
 TODO: In case of dragging argument from one operator to another, arguments should be just switched.
 TODO: Add show info about each element (snippets from RxJS docs?);

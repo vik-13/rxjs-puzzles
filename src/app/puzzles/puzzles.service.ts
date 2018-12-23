@@ -91,13 +91,16 @@ export class PuzzlesService {
       const puzzle = this.prepare(sourcePuzzle);
       let tree;
       puzzle.observables.forEach((observable) => {
-        tree = {
-          observable: [observable],
-          operators: []
-        };
+        for (let count = 0; count < puzzle.operatorsCollection.length; count++) {
 
-        if (this.checkEquality(tree, puzzle.pattern)) {
-          solutionsCount++;
+          tree = {
+            observable: [observable],
+            operators: []
+          };
+
+          if (this.checkEquality(tree, puzzle.pattern)) {
+            solutionsCount++;
+          }
         }
       });
       console.log(`Code: ${puzzle.code}, Possible solutions: ${solutionsCount}`);
