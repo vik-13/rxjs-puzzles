@@ -35,6 +35,7 @@ export class PuzzlesService {
           func: operator.func,
           argType: operator.argType,
           argRequired: operator.argRequired,
+          doc: operator.doc,
           values: []
         };
       }),

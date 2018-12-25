@@ -1,5 +1,8 @@
 <mat-card>
   <ng-content></ng-content>
+  <button mat-icon-button (click)="openDoc($event, operator)">
+    <mat-icon>help_outline</mat-icon>
+  </button>
 </mat-card>
 <ng-container *ngIf="validity() as validityObject">
   <div class="mat-card error-message" *ngIf="!validityObject.valid">

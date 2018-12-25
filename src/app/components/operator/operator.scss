@@ -34,4 +34,18 @@
   &.inner .error-message {
     display: block;
   }
+
+  .mat-icon-button {
+    opacity: 0;
+    margin-top: -12px;
+    margin-bottom: -12px;
+    margin-right: -12px;
+    transition: opacity .3s;
+  }
+
+  &:hover {
+    .mat-icon-button {
+      opacity: 1;
+    }
+  }
 }

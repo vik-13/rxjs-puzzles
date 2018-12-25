@@ -29,6 +29,7 @@
            [cdkDropListConnectedTo]="destOperators"
            (cdkDropListDropped)="dropToOperatorsSrc($event)">
         <rxp-operator cdkDrag
+                      [operator]="operator"
                       (cdkDragStarted)="startDragging()"
                       [cdkDragData]="operator"
                       (click)="clickOperatorsSrc($event, index);"

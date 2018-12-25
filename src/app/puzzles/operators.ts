@@ -14,6 +14,7 @@ import {
 } from 'rxjs/operators';
 import { ArgumentType } from './argument-type';
 import { ElementType } from './element-type';
+import { MapDocComponent } from '../doc/map/map';
 
 export enum OPERATOR {
   DEBOUNCE,
@@ -92,7 +93,8 @@ export const OperatorsCollection = {
     title: 'map({{argument}})',
     func: (arg, scheduler) => map(arg),
     argType: ArgumentType.FUNCTION,
-    argRequired: true
+    argRequired: true,
+    doc: MapDocComponent
   },
   [OPERATOR.FILTER]: {
     title: 'filter({{argument}})',

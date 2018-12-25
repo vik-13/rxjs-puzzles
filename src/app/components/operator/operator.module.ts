@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { OperatorComponent } from './operator';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatDialogModule, MatIconModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -10,7 +10,10 @@ import { MatCardModule } from '@angular/material';
   imports: [
     CommonModule,
 
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule
   ],
   exports: [
     OperatorComponent
