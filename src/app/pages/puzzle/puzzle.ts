@@ -5,8 +5,8 @@ import { PuzzlesService } from '../../puzzles/puzzles.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkValidity } from '../../puzzles/operators';
 import { ElementType } from '../../puzzles/element-type';
-import { MatDialog, MatDialogRef } from '@angular/material';
 import { SuccessDialogComponent } from './success-dialog/success-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'rxp-puzzle',

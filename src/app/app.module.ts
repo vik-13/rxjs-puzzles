@@ -6,8 +6,10 @@ import { AppComponent } from './app';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { PuzzleModule } from './pages/puzzle/puzzle.module';
-import { MatButtonModule, MatIconModule, MatToolbarModule } from '@angular/material';
 import { PuzzlesModule } from './puzzles/puzzles.module';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { ResultComponent } from './result';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material';
 import { StreamModule } from '../stream/stream.module';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
